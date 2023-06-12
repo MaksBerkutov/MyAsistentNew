@@ -1,0 +1,18 @@
+﻿<Window x:Class="MyAsistent.Module.MessageBoxes.GetString"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyAsistent.Module.MessageBoxes"
+        mc:Ignorable="d"
+        Title="GetString" Height="117" Width="626" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="457*"/>
+            <ColumnDefinition Width="169*"/>
+
+        </Grid.ColumnDefinitions>
+        <TextBox Name="tb" Margin="5 5 5 5" TextChanged="TextBox_TextChanged"/>
+        <TextBlock Grid.Column="1" Margin="5 5 5 5" Name="Blocks"/>
+    </Grid>
+</Window>

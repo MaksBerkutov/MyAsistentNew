@@ -1,0 +1,37 @@
+﻿<Page x:Class="MyAsistent.Windows.Code.MainPageCode"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:local="clr-namespace:MyAsistent.Windows.Code"
+        mc:Ignorable="d"
+        Title="MainPageCode" Height="450" Width="800">
+    <Grid>
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="111*" />
+            <RowDefinition Height="31*" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Новый Проект" Click="MenuItem_Click_1"></MenuItem>
+                <MenuItem Header="Открыть Проект" Name="OldProject" ></MenuItem>
+                <MenuItem Header="Cохранить" Click="MenuItem_Click_2"/>
+                <Separator />
+                <MenuItem Header="Выход" ></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Отладка">
+                <MenuItem Header="Собрать" Click="MenuItem_Click_3"/>
+                <Separator />
+                <MenuItem Header="Запустить" Click="MenuItem_Click_4"/>
+            </MenuItem>
+
+        </Menu>
+        <avalonedit:TextEditor x:Name="codeEditor" Grid.Row="1"  />
+        <TextBox Name="ErrorBox" Grid.Row="2"/>
+
+    </Grid>
+</Page>
