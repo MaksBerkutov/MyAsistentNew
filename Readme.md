@@ -61,7 +61,7 @@
 
 # Силки
 
-- [Повна докуметація](https://github.com/MaksBerkutov/MyAsistentNew/blob/master/MyAsistent/Document/FullGuide.md)
+- [Повна докуметація](https://github.com/MaksBerkutov/MyAsistentNew/blob/master/Document/FullGuide.md)
 
 ## Автори
 
