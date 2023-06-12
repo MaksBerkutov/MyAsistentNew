@@ -57,11 +57,12 @@ namespace MyAsistent
         {
             try
             {
-                allIpAdrres = new ObservableCollection<IPAddress>(Dns.GetHostEntry(MainSettings.IPServer).AddressList);
+                var tmp  = new List<IPAddress>(Dns.GetHostEntry(MainSettings.IPServer).AddressList);
+                tmp.ForEach(x => allIpAdrres.Add(x));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                allIpAdrres = new ObservableCollection<IPAddress>();
+                allIpAdrres.Clear();
             }
             
         }
@@ -83,12 +84,33 @@ namespace MyAsistent
         }
         public void SyncronaizeWebGui()
         {
-            MainPref = MainSettings.MainPrefix; OnPropertyChanged("MainPref");
-            StatusWebServers = MainSettings.StatusWebServer; OnPropertyChanged("StatusWebServers");
-            MainFold = MainSettings.MainFolder; OnPropertyChanged("MainFold");
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                MainPref = MainSettings.MainPrefix; OnPropertyChanged("MainPref");
+                StatusWebServers = MainSettings.StatusWebServer; OnPropertyChanged("StatusWebServers");
+                MainFold = MainSettings.MainFolder; OnPropertyChanged("MainFold");
+            });
+            
+        }
+        public void SyncronaizeServerGui()
+        {
+            try
+            {
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    Ip = MainSettings.IPServer; OnPropertyChanged("Ip");
+                    Port = MainSettings.PortServer; OnPropertyChanged("Port");
+                    Alis = MainSettings.AddresListIDServer; OnPropertyChanged("Alis");
+                });
+            }
+            catch (Exception ex)
+            {
+                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+            }
+          
         }
 
-        
+
         public bool AcceptInject
         {
             get { return acceptInject; }
@@ -299,7 +321,7 @@ namespace MyAsistent
           
 
 
-            Task.Delay(5000);
+            //Task.Delay(5000);
 
 
 
@@ -413,39 +435,46 @@ namespace MyAsistent
                     MessageBox.Show("Такой пользователь уже есть в системе");
         }
 
-        private void Log_SendMsgToConsoleWebServerEvent(Paragraph para)
+        private async void Log_SendMsgToConsoleWebServerEvent(Paragraph para)
         {
             try
             {
-                dispatcher.Invoke(new Action(() =>
+                await App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     try
                     {
-                        // LogWebServer.Document.Blocks.Add(para);
-                        LogWebServer.Dispatcher.Invoke(() =>
+                        if (LogWebServer.CheckAccess())
                         {
-                            this.LogWebServer.Document.Blocks.Add(para);
-                        });
-                    }
-                    catch (Exception)
-                    {
+                            LogWebServer.Document.Blocks.Add(para);
+                        }
 
+                        else
+                        {
+                            
+                            this.LogWebServer.Document.Blocks.Add(para);
+                        
+                        }
+                       
+                    }
+                    catch (Exception ex )
+                    {
+                        Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
                     }
                 }));
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                //Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
             }
         }
 
-        private void Log_SendMsgToConsoleEvent(Paragraph para)
+        private async void Log_SendMsgToConsoleEvent(Paragraph para)
         {
             try
             {
-                dispatcher.Invoke(new Action(() =>
+                await App.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     try
                     {
@@ -457,23 +486,21 @@ namespace MyAsistent
 
                         else
                         {
-                            OutputLog.Dispatcher.Invoke(() => {
-                                this.OutputLog.Document.Blocks.Add(para);
-                            });
+                            this.OutputLog.Document.Blocks.Add(para);
                         }
                         mut.ReleaseMutex();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
+                        //Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
                     }
                 }));
                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                //Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
             }
            
         }

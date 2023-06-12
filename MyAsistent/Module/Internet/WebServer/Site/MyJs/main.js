@@ -9,6 +9,13 @@ class Send {
         this.date = date;
     }
 }
+function clearDropdownList(dropdownId) {
+    var dropdown = document.getElementById(dropdownId);
+    
+    while (dropdown.options.length > 0) {
+      dropdown.remove(0);
+    }
+}
 async function DenfToJson(classes,name,acton) {
     const obj = new Send(JSON.stringify(classes), acton, name);
     console.log('------------');

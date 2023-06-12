@@ -39,6 +39,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Logo_Red.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Humanizer, Version=2.14.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\packages\Humanizer.Core.2.14.1\lib\netstandard2.0\Humanizer.dll</HintPath>
@@ -298,6 +301,7 @@
     <Resource Include="Resources\AnimLoad.gif" />
     <Resource Include="Info.txt" />
     <Resource Include="Loadin.jpg" />
+    <Resource Include="Logo_Red.ico" />
     <Content Include="Module\Internet\WebServer\Site\index.html" />
   </ItemGroup>
   <ItemGroup>

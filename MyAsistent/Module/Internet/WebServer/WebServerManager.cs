@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -46,9 +47,83 @@ namespace MyAsistent.Module.Internet.WebServer
                 MainSettings.MainPrefix = this.Url = item.Url;
             }
         }
+        public class ServerSettings: IHttpsRespones
+        {
+            public string ip;
+            public int port;
+            public List<string> ips;
+            public string  SelectedIps;
+            public ServerSettings()
+            {
+                ip = MainSettings.IPServer;
+                port = MainSettings.PortServer;
+                ips = new List<string>();
+                try
+                {
+                    Dns.GetHostEntry(MainSettings.IPServer).AddressList.ToList().ForEach(x => ips.Add(x.ToString()));
+                    SelectedIps = ips[MainSettings.AddresListIDServer];
+                }
+                catch (Exception ex)
+                {
+
+                    Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
+                }
+                
+            }
+            public string Get()
+            {
+                ips.Clear();
+                try
+                {
+                    Dns.GetHostEntry(MainSettings.IPServer).AddressList.ToList().ForEach(x => ips.Add(x.ToString()));
+                    SelectedIps = ips[MainSettings.AddresListIDServer];
+                }
+                catch (Exception ex)
+                {
+
+                    Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
+                }
+                return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            }
+
+            public void StartHandle() => MainWindow.date.SyncronaizeServerGui();
+
+            public void Update(string Date)
+            {
+                var item = Newtonsoft.Json.JsonConvert.DeserializeObject<ServerSettings>(Date);
+                if (MainSettings.IPServer != item.ip)
+                {
+                    MainSettings.IPServer = this.ip = item.ip;
+                    MainSettings.PortServer = this.port = item.port;
+                    MainSettings.AddresListIDServer = 0;
+                    ips = new List<string>();
+                    try
+                    {
+                        Dns.GetHostEntry(MainSettings.IPServer).AddressList.ToList().ForEach(x => ips.Add(x.ToString()));
+                        SelectedIps = ips.First();
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
+                    }
+                    
+                }
+                else
+                {
+                    MainSettings.PortServer = this.port = item.port;
+                    MainSettings.AddresListIDServer = item.ips.FindIndex(x => x.ToString() == item.SelectedIps);
+                    this.ips = item.ips;
+                    this.SelectedIps = item.SelectedIps;
+                }
+                
+            }
+
+        }
         static List<IHttpsRespones> ListClasses = new List<IHttpsRespones>()
         {
-            new WebServerSettings()
+            new WebServerSettings(),
+            new ServerSettings()
         };
         //End
         static HttpListener Listener = null;
@@ -70,22 +145,21 @@ namespace MyAsistent.Module.Internet.WebServer
             {
                 if(Listener != null)
                     Listener.Stop();
-                MainWindow.dispatcher.Invoke(new Action(() => {
-                    Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "\n<==========<Info>==========>");
-                    Logs.Log.WriteWeb(Logs.TypeLog.Message, "Сервер успешно выключен!");
-                    Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "<==========================>");
+              
+               Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "\n<==========<Info>==========>");
+               Logs.Log.WriteWeb(Logs.TypeLog.Message, "Сервер успешно выключен!");
+               Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "<==========================>");
 
-                }
-                   ));
+            
               
                
             }
             catch (Exception ex)
             {
 
-                MainWindow.dispatcher.Invoke(new Action(() => {
+              
                     Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
-                }));
+                
 
             }
         }
@@ -101,6 +175,7 @@ namespace MyAsistent.Module.Internet.WebServer
                 }
                 try
                 {
+                    
                     Listener = new HttpListener();
                     
                         Listener.Prefixes.Add(MainSettings.MainPrefix);
@@ -108,7 +183,7 @@ namespace MyAsistent.Module.Internet.WebServer
                         Listener.Start();
 
                         Listener.BeginGetContext(GetContextCallback, null);
-                    MainWindow.dispatcher.Invoke(new Action(() => {
+                   
                         Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "\n<==========<Info>==========>");
                         Logs.Log.WriteWeb(Logs.TypeLog.Message, "Сервер успешно запущен!");
                         Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Главный URL: {MainSettings.MainPrefix}");
@@ -116,18 +191,15 @@ namespace MyAsistent.Module.Internet.WebServer
                         Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Корень сайта: {MainSettings.MainFolder}");
                         Logs.Log.WriteWeb(Logs.TypeLog.Graphics, " <==========================>");
 
-                    }
-                    ));
+                    
                         
                       
                     
                 }
                 catch (Exception ex)
                 {
+                   Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
 
-                    MainWindow.dispatcher.Invoke(new Action(() => {
-                        Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
-                    }));
                 }
             });
         }
@@ -169,9 +241,9 @@ namespace MyAsistent.Module.Internet.WebServer
             }
             catch (Exception ex)
             {
-                MainWindow.dispatcher.Invoke(new Action(() => {
-                    Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
-                }));
+                
+                Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
+                
             }
 
             context.Response.OutputStream.Close();
@@ -216,13 +288,13 @@ namespace MyAsistent.Module.Internet.WebServer
                 var context = Listener.EndGetContext(ar);
                 Listener.BeginGetContext(GetContextCallback, null);
                 var NowTime = DateTime.UtcNow;
-                MainWindow.dispatcher.Invoke(new Action(() => {
+                
                     Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "<==========<Read>==========>");
                     Logs.Log.WriteWeb(Logs.TypeLog.Message, $"{NowTime.ToString("R")}: {context.Request.RawUrl}");
                     Logs.Log.WriteWeb(Logs.TypeLog.Message, $"URL: {context.Request.Url.OriginalString}");
                     Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Raw URL: {context.Request.RawUrl}");
                     Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "<==========================>");
-                }));
+             
                 
 
                 OnNewRespone(context);
@@ -230,9 +302,9 @@ namespace MyAsistent.Module.Internet.WebServer
             }
             catch (Exception ex)
             {
-                MainWindow.dispatcher.Invoke(new Action(() => {
-                    Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
-                }));
+
+                Logs.Log.WriteWeb(Logs.TypeLog.Error, ex.Message);
+
             }
            
 

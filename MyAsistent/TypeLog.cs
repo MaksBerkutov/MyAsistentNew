@@ -27,80 +27,116 @@ namespace Logs
         public static event SendMsgToConsole SendMsgToConsoleWebServerEvent;
         public static void Write(TypeLog type, string message)
         {
-            if(MyAsistent.MainSettings.VoiceLog)
-                MyAsistent.Module.Sound.Voice.PlayRuAsync(message);
-            if(!Directory.Exists(Path))Directory.CreateDirectory(Path.Split('\\')[0]);
+            MyAsistent.App.Current.Dispatcher.Invoke(() =>
+            {
+
             
-            if(!File.Exists(Path))File.Create(Path);
-            mutext.WaitOne();
-            while (true)
+            try
             {
-                try
+                if (MyAsistent.MainSettings.VoiceLog)
+                    MyAsistent.Module.Sound.Voice.PlayRuAsync(message);
+                if (!Directory.Exists(Path)) Directory.CreateDirectory(Path.Split('\\')[0]);
+
+                if (!File.Exists(Path)) File.Create(Path);
+                mutext.WaitOne();
+                while (true)
                 {
-                    File.AppendAllText(Path, $"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | {type.ToString()}\n");
-                    break;
+                    try
+                    {
+                        File.AppendAllText(Path, $"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | {type.ToString()}\n");
+                        break;
+                    }
+                    catch (System.IO.IOException ex)
+                    {
+                        Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                    }
                 }
-                catch (System.IO.IOException ex)
+                mutext.ReleaseMutex();
+
+
+
+                Paragraph para = new Paragraph();
+                para.Inlines.Add(new Run($"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | ") { Foreground = new SolidColorBrush(Colors.LightGreen) });
+                switch (type)
                 {
-                    Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                    case TypeLog.Message:
+                        para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Green) }));
+                        break;
+                    case TypeLog.Error:
+                        para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Red) }));
+                        break;
+                    case TypeLog.Warning:
+                        para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Yellow) }));
+                        break;
+
                 }
+                //textBox.Document.Blocks.Add(para)
+                SendMsgToConsoleEvent?.Invoke(para);
             }
-           
-           mutext.ReleaseMutex();
-            Paragraph para = new Paragraph();
-            para.Inlines.Add(new Run($"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | ") { Foreground = new SolidColorBrush(Colors.LightGreen) });
-            switch (type)
+            catch (Exception ex)
             {
-                case TypeLog.Message:
-                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Green) }));
-                    break;
-                case TypeLog.Error:
-                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Red) }));
-                    break;
-                case TypeLog.Warning:
-                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Yellow) }));
-                    break;
+                //Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
 
             }
-            mutext.WaitOne();
-            //textBox.Document.Blocks.Add(para)
-            SendMsgToConsoleEvent?.Invoke(para);
-            mutext.ReleaseMutex();
+            });
 
         }
         public static void WriteWeb(TypeLog type, string message)
         {
-            if (MyAsistent.MainSettings.VoiceLog)
-                MyAsistent.Module.Sound.Voice.PlayRuAsync(message);
-            if (!Directory.Exists(PathToWebLog)) Directory.CreateDirectory(Path.Split('\\')[0]);
-
-            if (!File.Exists(PathToWebLog)) File.Create(Path);
-            mutextWeb.WaitOne();
-            File.AppendAllText(PathToWebLog, $"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | {type.ToString()}\n");
-            mutextWeb.ReleaseMutex();
-            Paragraph para = new Paragraph();
-            para.Inlines.Add(new Run($"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | ") { Foreground = new SolidColorBrush(Colors.LightGreen) });
-            switch (type)
+            MyAsistent.App.Current.Dispatcher.Invoke(() =>
             {
-                case TypeLog.Message:
-                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Green) }));
-                    break;
-                case TypeLog.Error:
-                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Red) }));
-                    break;
-                case TypeLog.Warning:
-                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Yellow) }));
-                    break;
-                case TypeLog.Graphics:
-                    para = new Paragraph();
-                    para.Inlines.Add(new Bold(new Run(message) { Foreground = new SolidColorBrush(Colors.Green) }));
-                    break;
 
-            }
-            mutextWeb.WaitOne();
-            //textBox.Document.Blocks.Add(para)
-           // SendMsgToConsoleWebServerEvent?.Invoke(para);
-            mutextWeb.ReleaseMutex();
+                try
+                {
+                    if (MyAsistent.MainSettings.VoiceLog)
+                        MyAsistent.Module.Sound.Voice.PlayRuAsync(message);
+                    if (!Directory.Exists(PathToWebLog)) Directory.CreateDirectory(Path.Split('\\')[0]);
+
+                    if (!File.Exists(PathToWebLog)) File.Create(Path);
+                    mutextWeb.WaitOne();
+                    while (true)
+                    {
+                        try
+                        {
+                            File.AppendAllText(PathToWebLog, $"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | {type.ToString()}\n");
+                            break;
+                        }
+                        catch (System.IO.IOException ex)
+                        {
+                            Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                        }
+                    }
+                    mutextWeb.ReleaseMutex();
+
+                    Paragraph para = new Paragraph();
+                    para.Inlines.Add(new Run($"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | ") { Foreground = new SolidColorBrush(Colors.LightGreen) });
+                    switch (type)
+                    {
+                        case TypeLog.Message:
+                            para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Green) }));
+                            break;
+                        case TypeLog.Error:
+                            para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Red) }));
+                            break;
+                        case TypeLog.Warning:
+                            para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Yellow) }));
+                            break;
+                        case TypeLog.Graphics:
+                            para = new Paragraph();
+                            para.Inlines.Add(new Bold(new Run(message) { Foreground = new SolidColorBrush(Colors.Green) }));
+                            break;
+
+                    }
+
+                    SendMsgToConsoleWebServerEvent?.Invoke(para);
+                }
+                catch (Exception ex)
+                {
+
+                    Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                }
+            });
+
 
         }
     }
