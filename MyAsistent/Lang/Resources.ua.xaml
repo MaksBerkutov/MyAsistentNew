@@ -20,7 +20,7 @@
     <sys:String x:Key="AddCommand">Додати команду</sys:String>
     
     <sys:String x:Key="SettingServer">Налаштування серверу</sys:String>
-    <sys:String x:Key="RetsartServer">Налаштування точки доступу</sys:String>
+    <sys:String x:Key="RetsartServer">Перезапуск серверу</sys:String>
     <sys:String x:Key="SettingsPointAccept">Налаштування точки доступу</sys:String>
 
     <sys:String x:Key="ConnectModule">Під'єднані модулі</sys:String>

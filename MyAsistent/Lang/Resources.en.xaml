@@ -2,16 +2,95 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="Presest">Пресети</sys:String>
-    <sys:String x:Key="Command">Команди</sys:String>
-    <sys:String x:Key="Log">Журнал</sys:String>
-    <sys:String x:Key="Script">Скрипти</sys:String>
-    <sys:String x:Key="Settings">Налаштування</sys:String>
-    <sys:String x:Key="MainSettings">Голвні налаштування</sys:String>
-    <sys:String x:Key="Network">Мережа</sys:String>
-    <sys:String x:Key="Modul">Модулі</sys:String>
-    <sys:String x:Key="LocalWebServer">Локальний вебсервер</sys:String>
-    <sys:String x:Key="Injection">Ін'єкції</sys:String>
-    <sys:String x:Key="SettingsTelegram">Налаштування Telegarm</sys:String>
-    <sys:String x:Key="SettingsCOM">Налаштування COM</sys:String>
+    <sys:String x:Key="Presest">Presets</sys:String>
+    <sys:String x:Key="Command">Comands</sys:String>
+    <sys:String x:Key="Log">Logs</sys:String>
+    <sys:String x:Key="Script">Script</sys:String>
+    <sys:String x:Key="Settings">Settings</sys:String>
+    <sys:String x:Key="SettingsApp">Settings App</sys:String>
+    <sys:String x:Key="MainSettings">Main Settings</sys:String>
+    <sys:String x:Key="Network">Network</sys:String>
+    <sys:String x:Key="Modul">Module</sys:String>
+    <sys:String x:Key="LocalWebServer">Local Web Server</sys:String>
+    <sys:String x:Key="Injection">Injection</sys:String>
+    <sys:String x:Key="SettingsTelegram">Settings Telegarm</sys:String>
+    <sys:String x:Key="SettingsCOM">Settings COM</sys:String>
+
+    <sys:String x:Key="AddCommand">Add Comand</sys:String>
+
+    <sys:String x:Key="SettingServer">Settings Server</sys:String>
+    <sys:String x:Key="RetsartServer">Restart Server</sys:String>
+    <sys:String x:Key="SettingsPointAccept">Access point settings</sys:String>
+
+    <sys:String x:Key="ConnectModule">Connection Module</sys:String>
+
+    <sys:String x:Key="MainSetWebServ">Main Settings</sys:String>
+    <sys:String x:Key="StartServWeb">Turn On Web Server</sys:String>
+    <sys:String x:Key="MainUrlWeb">Path Main Web Page</sys:String>
+    <sys:String x:Key="MainPathWeb">Main Path Site</sys:String>
+    <sys:String x:Key="LogWeb">Logs Web Server</sys:String>
+
+    <sys:String x:Key="AccInj">Accept  Injection</sys:String>
+    <sys:String x:Key="BigInj">Advanced Settings</sys:String>
+    <sys:String x:Key="Login">Login</sys:String>
+    <sys:String x:Key="Pass">Pasworld</sys:String>
+
+    <sys:String x:Key="Add">Add</sys:String>
+    <sys:String x:Key="Del">Delete</sys:String>
+    <sys:String x:Key="Menu">Menu</sys:String>
+    <sys:String x:Key="Ip">Ip</sys:String>
+    <sys:String x:Key="Port">Port</sys:String>
+    <sys:String x:Key="AllUser">All Users</sys:String>
+
+    <sys:String x:Key="StateTBot">State TBot</sys:String>
+    <sys:String x:Key="ApiKey">Api Key</sys:String>
+    <sys:String x:Key="TID">Telegram ID</sys:String>
+    <sys:String x:Key="WLID">White List ID</sys:String>
+
+    <sys:String x:Key="WPC">Wifi PC</sys:String>
+    <sys:String x:Key="COM">COM</sys:String>
+    <sys:String x:Key="ComPC">Use the COM interface for connection</sys:String>
+    <sys:String x:Key="WifiPC">Use the WIFI interface for connection</sys:String>
+
+    <!-- AddVoiceCommandxaml -->
+
+    <sys:String x:Key="Voice">Voice</sys:String>
+    <sys:String x:Key="OK">OK</sys:String>
+
+    <!-- ArduinoReadDate -->
+
+    <sys:String x:Key="OutStr">Output string</sys:String>
+    <sys:String x:Key="Main">Main</sys:String>
+
+    <!-- Keyboard -->
+
+    <sys:String x:Key="Local">Local</sys:String>
+
+
+    <!-- Path -->
+
+    <sys:String x:Key="Path">Path</sys:String>
+    <sys:String x:Key="PathTF">Path to files</sys:String>
+
+    <!-- Cretate Command Box -->
+
+    <sys:String x:Key="CCBName">Menu Create Comand</sys:String>
+    <sys:String x:Key="Close">Close</sys:String>
+    <sys:String x:Key="CCBCMD">Command</sys:String>
+    <sys:String x:Key="Usings">Management</sys:String>
+    <sys:String x:Key="Activity">Activities</sys:String>
+    <sys:String x:Key="AllActivity">All Activities</sys:String>
+
+    <!-- Cretate Script Dialog -->
+    <sys:String x:Key="Name">Name</sys:String>
+    <sys:String x:Key="Save">Save</sys:String>
+
+    <!-- Main Page Code -->
+    <sys:String x:Key="File">File</sys:String>
+    <sys:String x:Key="Debug">Debug</sys:String>
+    <sys:String x:Key="Compile">Compile</sys:String>
+    <sys:String x:Key="Run">Run</sys:String>
+    <sys:String x:Key="Exit">Exit</sys:String>
+    <sys:String x:Key="NewProj">New Project</sys:String>
+    <sys:String x:Key="OpenProj">Open Project</sys:String>
 </ResourceDictionary>

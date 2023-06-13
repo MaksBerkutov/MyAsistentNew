@@ -20,7 +20,7 @@ namespace MyAsistent.Lang
         public static readonly ObservableCollection<CultureLang> Lang = new ObservableCollection<CultureLang>()
         {
             new CultureLang(){name = "Українська", code ="ua"},
-            new CultureLang(){name = "Англійська", code ="en"},
+            new CultureLang(){name = "English", code ="en"},
         };
         private string selectedLanguage;
 
