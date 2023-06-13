@@ -5,37 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyAsistent.Windows"
         mc:Ignorable="d"
-        Title="CreateCommandBox" Height="450" Width="800">
+        Title="Меню створення команд" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="267*"/>
             <ColumnDefinition Width="180*"/>
             <ColumnDefinition Width="353*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Main">
+        <GroupBox Header="Головне">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="17*"/>
                     <RowDefinition Height="24*"/>
                     <RowDefinition Height="96*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Комманда" TextAlignment="Center" VerticalAlignment="Center" Height="16"/>
+                <TextBlock Text="Команда" TextAlignment="Center" VerticalAlignment="Center" Height="16"/>
                 <TextBox Name="CommandTEXT"  Margin="5,5,5,5" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
-                <GroupBox Header="ControlCommand" Grid.Row="2">
+                <GroupBox Header="Управління" Grid.Row="2">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button Content="Delete" Margin="5 5 5 5" Click="Button_Click_2"/>
-                        <Button Content="Add" Margin="5 5 5 5" Grid.Row="1" Click="Button_Click"/>
-                        <Button Content="Close" Margin="5 5 5 5" Grid.Row="2" Click="Button_Click_1"/>
+                        <Button Content="Видалити" Margin="5 5 5 5" Click="Button_Click_2"/>
+                        <Button Content="Додати" Margin="5 5 5 5" Grid.Row="1" Click="Button_Click"/>
+                        <Button Content="Закрити" Margin="5 5 5 5" Grid.Row="2" Click="Button_Click_1"/>
                     </Grid>
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Activity" Grid.Column="1">
+        <GroupBox Header="Активності" Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -54,7 +54,7 @@
                 
             </Grid>
         </GroupBox>
-        <GroupBox Header="All command" Grid.Column="2">
+        <GroupBox Header="Всі активності" Grid.Column="2">
             <ListBox Name="AllCMD">
 
             </ListBox>

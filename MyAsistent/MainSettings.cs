@@ -69,7 +69,9 @@ namespace MyAsistent
         public static TimeSpan WaitForConectionDevice = new TimeSpan(0, 0, 30);
         public static readonly string path = "Saves";
         private static readonly string name = $"{path}\\Settings.json";
-       
+        public static readonly string PathToSaveScript = @$"Script";
+
+
         private static DispatcherTimer tm = new DispatcherTimer();
         public static string SpeechCulture = "ru-Ru";
         public static string VoiceCulture = "";
@@ -108,12 +110,17 @@ namespace MyAsistent
         //==========>
 
         //======<Telegram Module>
-        public static bool StatusTBot = true;
-        public static string APIKey = "5347684550:AAGQn3tIfdCZCYGqp7wNI-XC8HrJZ6l-rFk";
+        public static bool StatusTBot = false;
+        public static string APIKey = "";
         public static ObservableCollection<long> WhiteListID = new ObservableCollection<long>()
         {
 
         };
+        //==========>
+
+        //======<Script>
+        //==========>
+
 
         public static Dictionary<string,string> CultureText = new Dictionary<string,string>();
         public class Saves
@@ -168,6 +175,7 @@ namespace MyAsistent
             if (!Directory.Exists(name)) Directory.CreateDirectory(name.Split('\\')[0]);
             File.WriteAllText(name, JsonConvert.SerializeObject(new Saves()));
             Account.Save();
+            Windows.Code.CodePage.Save();
         }
         public static void Load()
         {
@@ -203,7 +211,7 @@ namespace MyAsistent
         // WaitForConectionDevice = save.WaitForConectionDevice;
         // SaveCommandTime = save.SaveCommandTime;
     }
-    public static void Init()
+        public static void Init()
         {
             if (tm.IsEnabled) { tm.Stop(); tm.Interval = SaveCommandTime; tm.Start(); }
             else

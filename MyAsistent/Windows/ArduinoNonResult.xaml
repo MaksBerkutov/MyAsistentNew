@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="ArduinoNonResult" Height="250" Width="230">
     <Grid>
-        <GroupBox Header="Arduino">
+        <GroupBox Header="Модулі">
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="173*"/>

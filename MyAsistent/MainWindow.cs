@@ -63,6 +63,7 @@ namespace MyAsistent
             catch (Exception ex)
             {
                 allIpAdrres.Clear();
+                Logs.Log.Write(Logs.TypeLog.Error,ex.Message);
             }
             
         }
@@ -91,6 +92,15 @@ namespace MyAsistent
                 MainFold = MainSettings.MainFolder; OnPropertyChanged("MainFold");
             });
             
+        }
+        public void SyncronaizeTelegramGui()
+        {
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                Apikey = MainSettings.APIKey; OnPropertyChanged("Apikey");
+                StatusTBot = MainSettings.StatusTBot; OnPropertyChanged("StatusTBot");
+            });
+
         }
         public void SyncronaizeServerGui()
         {
@@ -270,7 +280,7 @@ namespace MyAsistent
         public Mutex mutWeb = new Mutex();
         public MainWindow()
         {
-           
+            Windows.Code.CodePage.Init();
             InitializeComponent();
             mainFrame.Navigate(new Windows.Code.MainPageCode());
 
@@ -333,6 +343,7 @@ namespace MyAsistent
             WaitTime.Time = MainSettings.WaitForConectionDevice;
             Module.Sound.Sound.Init();
             Module.Sound.Voice.Init();
+          
 
             ComSettings.ItemsSource = Codes.COMSENDER.GetAllCom();
             ComSettings.SelectionChanged += ComSettings_SelectionChanged;

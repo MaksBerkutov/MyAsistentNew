@@ -120,9 +120,50 @@ namespace MyAsistent.Module.Internet.WebServer
             }
 
         }
+        public class TelegramBotModule: IHttpsRespones
+        {
+            public bool check;
+            public string api;
+            public string id;
+
+            public TelegramBotModule()
+            {
+                this.check = MainSettings.StatusTBot;
+                this.api = MainSettings.APIKey;
+                this.id = String.Empty;
+            }
+
+            public string Get()
+            {
+                return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            }
+
+            public void StartHandle() => MainWindow.date.SyncronaizeTelegramGui();
+
+            public void Update(string Date)
+            {
+                var item = Newtonsoft.Json.JsonConvert.DeserializeObject<TelegramBotModule>(Date);
+               
+                MainSettings.APIKey = this.api = item.api;
+
+                MainSettings.StatusTBot = this.check = item.check;
+                
+                if (id != item.id && long.TryParse(item.id, out var Tid))
+                {
+                    id = item.id;
+                    App.Current.Dispatcher.Invoke(() => MainSettings.WhiteListID.Add(Tid));
+                   
+                }
+
+
+
+            }
+        }
+
         static List<IHttpsRespones> ListClasses = new List<IHttpsRespones>()
         {
             new WebServerSettings(),
+            new TelegramBotModule(),
             new ServerSettings()
         };
         //End

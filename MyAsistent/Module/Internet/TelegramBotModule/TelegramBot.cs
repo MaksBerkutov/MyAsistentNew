@@ -29,7 +29,7 @@ namespace MyAsistent.Module.Internet.TelegramBotModule
         static private (string, MenuItemSelected)[][] Menu = new (string, MenuItemSelected)[][]
         {
             new (string, MenuItemSelected)[]{("Емуляция комманд",EmulationCMD),("Базовая информация",BaseInfo)},
-            new (string, MenuItemSelected)[]{("Получить все логи", GetFileLog),("Базовая информация",BaseInfo)}
+            new (string, MenuItemSelected)[]{("Получить все логи", GetFileLog),("Получить все логи сайта", GetFileWebLog) }
         };
         private async static void EmulationCMD(ITelegramBotClient botClient, Message msg)
         {
@@ -60,6 +60,28 @@ namespace MyAsistent.Module.Internet.TelegramBotModule
                 }
             }
            
+        }
+        private async static void GetFileWebLog(ITelegramBotClient botClient, Message msg)
+        {
+            while (true)
+            {
+                try
+                {
+                    using (var stream = System.IO.File.OpenRead(Log.Path))
+                    {
+                        string[] tmp = System.IO.File.ReadAllLines(Log.PathToWebLog);
+                        Telegram.Bot.Types.InputFiles.InputOnlineFile iof = new Telegram.Bot.Types.InputFiles.InputOnlineFile(stream);
+                        iof.FileName = "WebLog.txt";
+                        var send = await botClient.SendDocumentAsync(msg.Chat, iof, "Web Log Dump");
+                    }
+                    break;
+                }
+                catch (System.IO.IOException ex)
+                {
+                    Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                }
+            }
+
         }
         private async static void BaseInfo(ITelegramBotClient botClient, Message msg)
         {

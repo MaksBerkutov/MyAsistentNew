@@ -24,6 +24,7 @@ namespace MyAsistent.Windows.Code
         public CreateScriptDialog()
         {
             InitializeComponent();
+            Path.Text = MainSettings.PathToSaveScript;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -62,11 +63,12 @@ namespace MyAsistent.Windows.Code
             }
             
         ");
+                CodePage.Files.Add(Result);
               
             }
             catch (Exception ex)
             {
-                //LOG
+                Logs.Log.Write(Logs.TypeLog.Error,ex.Message);
                 
             }
             

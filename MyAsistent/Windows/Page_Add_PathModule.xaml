@@ -8,7 +8,7 @@
       Title="AddedPath" Height="194" Width="349">
 
     <Grid >
-        <GroupBox Header="Path" >
+        <GroupBox Header="Шлях" >
             <Grid>
                 <Grid.RowDefinitions>
 
@@ -18,15 +18,15 @@
                     <RowDefinition Height="52*"/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Path To File" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="26" Width="70"/>
+                <Label Content="Шлях до файлу" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="26" Width="70"/>
                 <TextBox Name="PathI"  Grid.Row="1" Margin="5,5,5,5" TextChanged="PathI_TextChanged"/>
-                <CheckBox Name="LocalMachine" IsChecked="True" Content="Local Machine" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="16" Width="95"/>
+                <CheckBox Name="LocalMachine" IsChecked="True" Content="Локальний пристрій" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="16" Width="137"/>
                 <Grid Grid.Row="3" Margin="0,6,0,0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="PathButI" Content="Path"  Click="PathButI_Click" Grid.Column="0" Margin="5 5 5 5"/>
+                    <Button Name="PathButI" Content="Шлях"  Click="PathButI_Click" Grid.Column="0" Margin="5 5 5 5"/>
                     <Button Content="Ok" Click="Button_Click" Grid.Column="1" Margin="5 5 5 5"/>
                 </Grid>
             </Grid>

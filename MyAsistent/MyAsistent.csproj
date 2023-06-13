@@ -158,6 +158,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Logs\Log.cs" />
     <Compile Include="MainSettings.cs" />
     <Compile Include="MainWindow.cs" />
     <Compile Include="Module\Cmd\Cmd.cs" />
@@ -175,7 +176,7 @@
     <Compile Include="MyGUIElemet\TimePicker.xaml.cs">
       <DependentUpon>TimePicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TypeLog.cs" />
+    <Compile Include="Logs\TypeLog.cs" />
     <Compile Include="Windows\AddItem.xaml.cs">
       <DependentUpon>AddItem.xaml</DependentUpon>
     </Compile>

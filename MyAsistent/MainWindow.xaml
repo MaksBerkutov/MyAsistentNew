@@ -10,26 +10,30 @@
     <Grid>
         <TextBox Name="RES" HorizontalAlignment="Left" Margin="216,273,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <TabControl>
-            <TabItem Header="Presset">
+            <TabItem Header="Пресети">
                 <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="52*"/>
+                        <ColumnDefinition Width="345*"/>
+                    </Grid.ColumnDefinitions>
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Code Project">
+            <TabItem Header="Команди">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="193*"/>
                     </Grid.RowDefinitions>
                     <!--<ComboBox Name="TypePath" SelectionChanged="TypePath_SelectionChanged"/> -->
-                    <Button Name="CallingAddMenu" Content="AddMenu" Click="CallingAddMenu_Click"/>
+                    <Button Name="CallingAddMenu" Content="Додати команду" Click="CallingAddMenu_Click"/>
                     <Grid Name="CodeProjectMenu" Grid.Row="1"   />
                     <ListBox Name="Coomand"  Grid.Row="1" >
 
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Logs">
+            <TabItem Header="Журнал">
                 <Grid Background="Black">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="355*"/>
@@ -42,12 +46,12 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Script">
+            <TabItem Header="Скрипти">
                 <Frame x:Name="mainFrame" />
             </TabItem>
-            <TabItem Header="Settings">
+            <TabItem Header="Налаштування">
                 <TabControl>
-                    <TabItem Header="Main">
+                    <TabItem Header="Голвні налаштування">
                         <Grid Background="Gray">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -62,8 +66,8 @@
                             </Grid.ColumnDefinitions>
                             <ComboBox Name="Seting_SetSpechCulture" Margin="0,15,15,15" SelectionChanged="Setting_Seting_SetSpechCulture"  Grid.Row="0" Grid.ColumnSpan="2" />
                             <ComboBox Name="Setting_SetSpeechVoice" Margin="0,15,15,15" SelectionChanged="Setting_SetSpeechVoice_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="2"/>
-                            <CheckBox Name="Settings_VoiceLog" Margin="0,15,15,15" IsChecked="False" Grid.Row="2" Content="Озвучивать логи" Click="Settings_VoiceLog_Click" Grid.ColumnSpan="2"/>
-                            <CheckBox Name="Settings_VoiceMessage" Margin="0,15,15,15" IsChecked="True" Grid.Row="3" Content="Озвучивать Сообщения" Click="Settings_VoiceMessage_Click" Grid.ColumnSpan="2"/>
+                            <CheckBox Name="Settings_VoiceLog" Margin="0,15,15,15" IsChecked="False" Grid.Row="2" Content="Озвучувати журнал" Click="Settings_VoiceLog_Click" Grid.ColumnSpan="2"/>
+                            <CheckBox Name="Settings_VoiceMessage" Margin="0,15,15,15" IsChecked="True" Grid.Row="3" Content="Озвучувати повідомлення" Click="Settings_VoiceMessage_Click" Grid.ColumnSpan="2"/>
                             <ListBox Name="listCultureText" Grid.Column="2" Grid.RowSpan="2" MouseDoubleClick="ListCultureText_MouseDoubleClick"/>
 
 
@@ -73,21 +77,21 @@
                                     <RowDefinition Height="29*"/>
                                 </Grid.RowDefinitions>
                                 <tp:TimePicker  x:Name="SaveTime" ChangeTimePickerHandler="ChangeTimePicker_SaveTime" />
-                                <TextBlock Text="Время автосохранения" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
+                                <TextBlock Text="Час автозбереження" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
                             </Grid>
                             <Grid Grid.Row="3" Grid.Column="2">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="66*"/>
                                     <RowDefinition Height="29*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="Время ожидание инцилизации" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
+                                <TextBlock Text="Час очікування підключення модулів" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
                                 <tp:TimePicker  x:Name="WaitTime" ChangeTimePickerHandler="ChangeTimePicker_WaitTime"/>
                             </Grid>
 
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Network">
+                    <TabItem Header="Мережа">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -101,7 +105,7 @@
                                 <ColumnDefinition Width="394*"/>
 
                             </Grid.ColumnDefinitions>
-                            <GroupBox Header="Server Settings" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" >
+                            <GroupBox Header="Налаштування серверу" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" >
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -112,10 +116,10 @@
                                     <TextBox Text="{Binding Ip}" Margin="5 5 5 5"/>
                                     <TextBox Text="{Binding Port}" Grid.Row="1" Margin="5 5 5 5"/>
                                     <ComboBox ItemsSource="{Binding AllIpAdress}" SelectedIndex="{Binding Alis}" Grid.Row="2" Margin="5 5 5 5"/>
-                                    <Button Grid.Row="3" Name="RetsartServer" Content="Restart Server" Margin="5 5 5 5" Click="RestartServer_Click"/>
+                                    <Button Grid.Row="3" Name="RetsartServer" Content="Перезапуск серверу" Margin="5 5 5 5" Click="RestartServer_Click"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="Network Settings" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                            <GroupBox Header="Налштування точки доступу" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
                                 <Grid>
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -130,7 +134,7 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Arduino">
+                    <TabItem Header="Модулі">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -146,7 +150,7 @@
                             </Grid.ColumnDefinitions>
 
 
-                            <GroupBox Header="Arduino Socket Users" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
+                            <GroupBox Header="Під'єднані модулі" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="216*"/>
@@ -166,7 +170,7 @@
                             </GroupBox>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Local Web Server">
+                    <TabItem Header="Локальний вебсервер">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -183,21 +187,21 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox x:Name="LWS" IsChecked="{Binding StatusWebServers}" Content="Включить Web Server" VerticalAlignment="Center" HorizontalAlignment="Center" Click="StartWebServer"/>
+                                    <CheckBox x:Name="LWS" IsChecked="{Binding StatusWebServers}" Content="Увімкнути Вебсервер" VerticalAlignment="Center" HorizontalAlignment="Center" Click="StartWebServer"/>
                                     <TextBox  Margin="5,5,5,5" Text="{Binding MainPref}" Grid.Row="2"/>
                                     <TextBox  Margin="5,5,5,5" Text="{Binding MainFold}" Grid.Row="4"/>
-                                    <TextBlock Text="Адресс главной веб страници" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Адрес головної вебсторінки" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
 
-                                    <TextBlock Text="Корневая папка сайта" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Корінна папка сайту" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="Log Web Server">
+                            <GroupBox Header="Журнал Вебсерверу">
                                 <RichTextBox Name="LogWebServer" FontSize="10" Background="Black"/>
                             </GroupBox>
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Inject">
+                    <TabItem Header="Ін'єкції">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -219,23 +223,23 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
-                                        <CheckBox IsChecked="{Binding AcceptInject}" Content="Разрешить Injection" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                        <CheckBox x:Name="InjectSett" Grid.Column="1" Content="Глубокие настройки" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox IsChecked="{Binding AcceptInject}" Content="Дозволити ін'єкції" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox x:Name="InjectSett" Grid.Column="1" Content="Поглиблені налаштування" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
                                     </Grid>
                                     <TextBox Name="InjectLogin" Margin="5,5,5,5" Text="Login" Grid.Row="2"/>
                                     <TextBox Name="InjectPass" Margin="5,5,5,5" Text="Pass" Grid.Row="4"/>
-                                    <TextBlock Text="Логин" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Логін" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
 
                                     <TextBlock Text="Пароль" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
-                                    <GroupBox Header="Menu"  Grid.RowSpan="2" Grid.Row="5" >
+                                    <GroupBox Header="Меню"  Grid.RowSpan="2" Grid.Row="5" >
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Button Content="Add" Margin="5 5 5 5" Click="InjectAdd_Click"/>
-                                            <Button Click="InjectDelete_Click" Grid.Column="1" Content="Delete" Margin="5 5 5 5"/>
+                                            <Button Content="Додати" Margin="5 5 5 5" Click="InjectAdd_Click"/>
+                                            <Button Click="InjectDelete_Click" Grid.Column="1" Content="Видалити" Margin="5 5 5 5"/>
                                         </Grid>
                                     </GroupBox>
                                 </Grid>
@@ -245,12 +249,12 @@
                                     <RowDefinition Height="127*"/>
                                     <RowDefinition Height="62*"/>
                                 </Grid.RowDefinitions>
-                                <GroupBox Header="All Users">
+                                <GroupBox Header="Всі користувачі">
                                     <ListBox Name="InjectItems">
 
                                     </ListBox>
                                 </GroupBox>
-                                <GroupBox Header="Глубокие настройки" Grid.Row="1" IsEnabled="{Binding ElementName=InjectSett, Path=IsChecked, Mode=TwoWay}">
+                                <GroupBox Header="Поглиблені налаштування" Grid.Row="1" IsEnabled="{Binding ElementName=InjectSett, Path=IsChecked, Mode=TwoWay}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="271*"/>
@@ -271,13 +275,13 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Telegarm Settings">
+                    <TabItem Header="Налаштування Telegarm">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <GroupBox Grid.Column="1" Header="Main settings">
+                            <GroupBox Grid.Column="1" Header="Головні налаштування">
                                 <Grid Background="LightGray">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -288,10 +292,10 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox IsChecked="{Binding StatusTBot}" Content="Status TBot Module" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding StatusTBot}" Content="Статус модулю TBot" VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     <TextBox  Margin="5,5,5,5" Text="{Binding Apikey}" Grid.Row="2"/>
                                     <TextBox Name="TIDAdd"  Margin="5,5,5,5" Text="" Grid.Row="4"/>
-                                    <TextBlock Text="Api key" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Api ключ" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
 
                                     <TextBlock Text="T ID" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
                                     <GroupBox Header="Menu"  Grid.RowSpan="2" Grid.Row="5" >
@@ -306,7 +310,7 @@
                                     </GroupBox>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="White List ID">
+                            <GroupBox Header="Білий список ID">
                                 <ListBox Name="TIDList">
 
                                 </ListBox>
@@ -314,7 +318,7 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="PC COM Settings">
+                    <TabItem Header="Налаштування COM">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -347,8 +351,8 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <RadioButton GroupName="MSP" Name="ComPC" Content="Использовать COM интерфейся для подключения" IsChecked="True"/>
-                                    <RadioButton GroupName="MSP"  Grid.Row="1" Name="WifiPC" Content="Использовать WIFI интерфейся для подключения" IsChecked="False"/>
+                                    <RadioButton GroupName="MSP" Name="ComPC" Content="Викорстовувати COM інтерфейс для під'єднання" IsChecked="True"/>
+                                    <RadioButton GroupName="MSP"  Grid.Row="1" Name="WifiPC" Content="Викорстовувати WIFI інтерфейс для під'єднання" IsChecked="False"/>
                                 </Grid>
 
                             </GroupBox>

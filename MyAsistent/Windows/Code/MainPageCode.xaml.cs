@@ -20,7 +20,7 @@ namespace MyAsistent.Windows.Code
     public partial class MainPageCode : Page
     {
         private int CountLastFiles = 5;
-        private FileCodeInfo selected;
+        private FileCodeInfo selected = null;
         public MainPageCode()
         {
             var LastElement = Code.CodePage.Files.Skip(Math.Max(0, Code.CodePage.Files.Count - CountLastFiles)).ToList();
@@ -30,7 +30,11 @@ namespace MyAsistent.Windows.Code
                 MenuItem menuItem = new MenuItem();
                 menuItem.Header = file.Name;
                 menuItem.Click += MenuItem_Click;
+                OldProject.Items.Add(menuItem);
             }
+           
+
+
 
 
 
@@ -55,33 +59,76 @@ namespace MyAsistent.Windows.Code
             //Create
             var Dialog = new Code.CreateScriptDialog();
             Dialog.ShowDialog();
-            if (Dialog.Result != null) Load(Dialog.Result);
+            if (Dialog.Result != null) { 
+                Load(Dialog.Result);
+                if (OldProject.Items.Count > 1)
+                    OldProject.Items.Remove(0);
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = Dialog.Result.Name;
+                menuItem.Click += MenuItem_Click;
+                OldProject.Items.Add(menuItem);
+                
+            }
 
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
             //save
-            System.IO.File.WriteAllText(selected.Path, codeEditor.Text);
+            if (selected != null)
+                System.IO.File.WriteAllText(selected.Path, codeEditor.Text);
         }
 
-        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        private async void MenuItem_Click_3(object sender, RoutedEventArgs e)
         {
-            //debug
-            ErrorBox.Text = String.Empty;
-            if (MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Compile(codeEditor.Text,out var err,out var memoryStream)){
-                ErrorBox.Text = "Успешно скомпилиривано";
-            }
-            else
-            {
-                foreach (var ex in err) ErrorBox.Text += $"{ex.ToString()}\n";
-            }
+            if (selected != null)
+                await Task.Run(() =>
+                {
+                    //Debug Button
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        ErrorBox.Text = String.Empty;
+                        if (MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Compile(codeEditor.Text, out var err, out var memoryStream))
+                            ErrorBox.Text = "Успешно скомпилиривано";
+                        else
+                            foreach (var ex in err)
+                                ErrorBox.Text += $"{ex.ToString()}\n";
+                        MenuItem_Click_2(sender, e);
+                    });
+
+                });
+
         }
 
-        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        private async void MenuItem_Click_4(object sender, RoutedEventArgs e)
         {
             //run
-            MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Run(codeEditor.Text);
+            if (selected != null)
+                await Task.Run(() =>
+                {
+
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        ErrorBox.Text = String.Empty;
+                        if (MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Compile(codeEditor.Text, out var err, out var memoryStream))
+                        {
+                            ErrorBox.Text = "Успешно скомпилиривано";
+                            MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Run(memoryStream);
+                        }
+                        else
+                            foreach (var ex in err)
+                                ErrorBox.Text += $"{ex.ToString()}\n";
+                        MenuItem_Click_2(sender, e);
+                    });
+                });
+        }
+
+        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
+        {
+            //Exit
+            MenuItem_Click_2(sender, e);
+            codeEditor.Text = String.Empty;
+            selected = null;
         }
     }
 }

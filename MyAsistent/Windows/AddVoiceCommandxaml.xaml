@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="160" d:DesignWidth="500"
       Title="Voice Command">
-    <GroupBox Header="Voice">
+    <GroupBox Header="Голос">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="55*"/>
