@@ -1,0 +1,17 @@
+﻿<!-- Resources.ua.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="Presest">Пресети</sys:String>
+    <sys:String x:Key="Command">Команди</sys:String>
+    <sys:String x:Key="Log">Журнал</sys:String>
+    <sys:String x:Key="Script">Скрипти</sys:String>
+    <sys:String x:Key="Settings">Налаштування</sys:String>
+    <sys:String x:Key="MainSettings">Голвні налаштування</sys:String>
+    <sys:String x:Key="Network">Мережа</sys:String>
+    <sys:String x:Key="Modul">Модулі</sys:String>
+    <sys:String x:Key="LocalWebServer">Локальний вебсервер</sys:String>
+    <sys:String x:Key="Injection">Ін'єкції</sys:String>
+    <sys:String x:Key="SettingsTelegram">Налаштування Telegarm</sys:String>
+    <sys:String x:Key="SettingsCOM">Налаштування COM</sys:String>
+</ResourceDictionary>

@@ -158,6 +158,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Lang\LangManager.cs" />
     <Compile Include="Logs\Log.cs" />
     <Compile Include="MainSettings.cs" />
     <Compile Include="MainWindow.cs" />
@@ -208,6 +209,14 @@
     <Compile Include="Windows\Page_Add_PathModule.xaml.cs">
       <DependentUpon>Page_Add_PathModule.xaml</DependentUpon>
     </Compile>
+    <Page Include="Lang\Resources.en.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lang\Resources.ua.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

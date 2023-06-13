@@ -1,0 +1,111 @@
+﻿<!-- Resources.ua.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- MainWindow -->
+    <sys:String x:Key="Presest">Пресети</sys:String>
+    <sys:String x:Key="Command">Команди</sys:String>
+    <sys:String x:Key="Log">Журнал</sys:String>
+    <sys:String x:Key="Script">Скрипти</sys:String>
+    <sys:String x:Key="Settings">Налаштування</sys:String>
+    <sys:String x:Key="SettingsApp">Налаштування программи</sys:String>
+    <sys:String x:Key="MainSettings">Голвні налаштування</sys:String>
+    <sys:String x:Key="Network">Мережа</sys:String>
+    <sys:String x:Key="Modul">Модулі</sys:String>
+    <sys:String x:Key="LocalWebServer">Локальний вебсервер</sys:String>
+    <sys:String x:Key="Injection">Ін'єкції</sys:String>
+    <sys:String x:Key="SettingsTelegram">Налаштування Telegarm</sys:String>
+    <sys:String x:Key="SettingsCOM">Налаштування COM</sys:String>
+    
+    <sys:String x:Key="AddCommand">Додати команду</sys:String>
+    
+    <sys:String x:Key="SettingServer">Налаштування серверу</sys:String>
+    <sys:String x:Key="RetsartServer">Налаштування точки доступу</sys:String>
+    <sys:String x:Key="SettingsPointAccept">Налаштування точки доступу</sys:String>
+
+    <sys:String x:Key="ConnectModule">Під'єднані модулі</sys:String>
+
+    <sys:String x:Key="MainSetWebServ">Головні налаштування</sys:String>
+    <sys:String x:Key="StartServWeb">Увімкнути Вебсервер</sys:String>
+    <sys:String x:Key="MainUrlWeb">Адресa головної вебсторінки</sys:String>
+    <sys:String x:Key="MainPathWeb">Корінна папка сайту</sys:String>
+    <sys:String x:Key="LogWeb">Журнал Вебсерверу</sys:String>
+
+    <sys:String x:Key="AccInj">Дозволити ін'єкції</sys:String>
+    <sys:String x:Key="BigInj">Поглиблені налаштування</sys:String>
+    <sys:String x:Key="Login">Логін</sys:String>
+    <sys:String x:Key="Pass">Пароль</sys:String>
+    
+    <sys:String x:Key="Add">Додати</sys:String>
+    <sys:String x:Key="Del">Видалити</sys:String>
+    <sys:String x:Key="Menu">Меню</sys:String>
+    <sys:String x:Key="Ip">Ip</sys:String>
+    <sys:String x:Key="Port">Порт</sys:String>
+    <sys:String x:Key="AllUser">Всі користувачі</sys:String>
+
+    <sys:String x:Key="StateTBot">Статус модулю TBot</sys:String>
+    <sys:String x:Key="ApiKey">Api ключ</sys:String>
+    <sys:String x:Key="TID">Telegram ID</sys:String>
+    <sys:String x:Key="WLID">Білий список ID</sys:String>
+
+    <sys:String x:Key="WPC">Wifi PC</sys:String>
+    <sys:String x:Key="COM">COM</sys:String>
+    <sys:String x:Key="ComPC">Викорстовувати COM інтерфейс для під'єднання</sys:String>
+    <sys:String x:Key="WifiPC">Викорстовувати WIFI інтерфейс для під'єднання</sys:String>
+
+    <!-- AddVoiceCommandxaml -->
+
+    <sys:String x:Key="Voice">Голос</sys:String>
+    <sys:String x:Key="OK">Ок</sys:String>
+
+    <!-- ArduinoReadDate -->
+
+    <sys:String x:Key="OutStr">Строка виводу</sys:String>
+    <sys:String x:Key="Main">Голвне</sys:String>
+
+    <!-- Keyboard -->
+
+    <sys:String x:Key="Local">Локально</sys:String>
+
+
+    <!-- Path -->
+
+    <sys:String x:Key="Path">Шлях</sys:String>
+    <sys:String x:Key="PathTF">Шлях до файлу</sys:String>
+
+    <!-- Cretate Command Box -->
+
+    <sys:String x:Key="CCBName">Меню створення команд</sys:String>
+    <sys:String x:Key="Close">Закрити</sys:String>
+    <sys:String x:Key="CCBCMD">Команда</sys:String>
+    <sys:String x:Key="Usings">Управління</sys:String>
+    <sys:String x:Key="Activity">Активності</sys:String>
+    <sys:String x:Key="AllActivity">Всі активності</sys:String>
+
+    <!-- Cretate Script Dialog -->
+    <sys:String x:Key="Name">Імя</sys:String>
+    <sys:String x:Key="Save">Зберегти</sys:String>
+
+    <!-- Main Page Code -->
+    <sys:String x:Key="File">Файл</sys:String>
+    <sys:String x:Key="Debug">Налагодження</sys:String>
+    <sys:String x:Key="Compile">Зібрати</sys:String>
+    <sys:String x:Key="Run">Запустити</sys:String>
+    <sys:String x:Key="Exit">Вихід</sys:String>
+    <sys:String x:Key="NewProj">Новий проект</sys:String>
+    <sys:String x:Key="OpenProj">Відкрити проект</sys:String>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ResourceDictionary>

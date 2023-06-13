@@ -7,10 +7,11 @@
         xmlns:local="clr-namespace:MyAsistent"
         mc:Ignorable="d"
         Title="Asissten @MRX/MaksBerkutov" Height="450" Width="800" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
+
     <Grid>
         <TextBox Name="RES" HorizontalAlignment="Left" Margin="216,273,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <TabControl>
-            <TabItem Header="Пресети">
+            <TabItem Header="{DynamicResource Presest}">
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="52*"/>
@@ -19,21 +20,21 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Команди">
+            <TabItem Header="{DynamicResource Command}">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="193*"/>
                     </Grid.RowDefinitions>
                     <!--<ComboBox Name="TypePath" SelectionChanged="TypePath_SelectionChanged"/> -->
-                    <Button Name="CallingAddMenu" Content="Додати команду" Click="CallingAddMenu_Click"/>
+                    <Button Name="CallingAddMenu" Content="{DynamicResource AddCommand}" Click="CallingAddMenu_Click"/>
                     <Grid Name="CodeProjectMenu" Grid.Row="1"   />
                     <ListBox Name="Coomand"  Grid.Row="1" >
 
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Журнал">
+            <TabItem Header="{DynamicResource Log}">
                 <Grid Background="Black">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="355*"/>
@@ -46,12 +47,12 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Скрипти">
+            <TabItem Header="{DynamicResource Script}">
                 <Frame x:Name="mainFrame" />
             </TabItem>
-            <TabItem Header="Налаштування">
+            <TabItem Header="{DynamicResource Settings}">
                 <TabControl>
-                    <TabItem Header="Голвні налаштування">
+                    <TabItem Header="{DynamicResource MainSettings}">
                         <Grid Background="Gray">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -91,7 +92,7 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Мережа">
+                    <TabItem Header="{DynamicResource Network}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -105,21 +106,25 @@
                                 <ColumnDefinition Width="394*"/>
 
                             </Grid.ColumnDefinitions>
-                            <GroupBox Header="Налаштування серверу" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" >
+                            <GroupBox Header="{DynamicResource SettingServer}" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" >
                                 <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="55*"/>
+                                        <ColumnDefinition Width="327*"/>
+                                    </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <TextBox Text="{Binding Ip}" Margin="5 5 5 5"/>
-                                    <TextBox Text="{Binding Port}" Grid.Row="1" Margin="5 5 5 5"/>
-                                    <ComboBox ItemsSource="{Binding AllIpAdress}" SelectedIndex="{Binding Alis}" Grid.Row="2" Margin="5 5 5 5"/>
-                                    <Button Grid.Row="3" Name="RetsartServer" Content="Перезапуск серверу" Margin="5 5 5 5" Click="RestartServer_Click"/>
+                                    <TextBox Text="{Binding Ip}" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                                    <TextBox Text="{Binding Port}" Grid.Row="1" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                                    <ComboBox ItemsSource="{Binding AllIpAdress}" SelectedIndex="{Binding Alis}" Grid.Row="2" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+                                    <Button Grid.Row="3" Name="RetsartServer" Content="{DynamicResource RetsartServer}" Margin="5,5,5,5" Click="RestartServer_Click" Grid.ColumnSpan="2"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="Налштування точки доступу" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                            <GroupBox Header="{DynamicResource SettingsPointAccept}" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
                                 <Grid>
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -134,7 +139,7 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Модулі">
+                    <TabItem Header="{DynamicResource Modul}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -150,7 +155,7 @@
                             </Grid.ColumnDefinitions>
 
 
-                            <GroupBox Header="Під'єднані модулі" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
+                            <GroupBox Header="{DynamicResource ConnectModule}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="216*"/>
@@ -170,13 +175,13 @@
                             </GroupBox>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Локальний вебсервер">
+                    <TabItem Header="{DynamicResource LocalWebServer}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <GroupBox Grid.Column="1" Header="Main Settings Web Servers">
+                            <GroupBox Grid.Column="1" Header="{DynamicResource MainSetWebServ}">
                                 <Grid Background="LightGray">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -187,27 +192,27 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox x:Name="LWS" IsChecked="{Binding StatusWebServers}" Content="Увімкнути Вебсервер" VerticalAlignment="Center" HorizontalAlignment="Center" Click="StartWebServer"/>
+                                    <CheckBox x:Name="LWS" IsChecked="{Binding StatusWebServers}" Content="{DynamicResource StartServWeb}" VerticalAlignment="Center" HorizontalAlignment="Center" Click="StartWebServer"/>
                                     <TextBox  Margin="5,5,5,5" Text="{Binding MainPref}" Grid.Row="2"/>
                                     <TextBox  Margin="5,5,5,5" Text="{Binding MainFold}" Grid.Row="4"/>
-                                    <TextBlock Text="Адрес головної вебсторінки" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Адрес головної вебсторінки}" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
 
-                                    <TextBlock Text="Корінна папка сайту" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource MainPathWeb}" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="Журнал Вебсерверу">
+                            <GroupBox Header="{DynamicResource LogWeb}">
                                 <RichTextBox Name="LogWebServer" FontSize="10" Background="Black"/>
                             </GroupBox>
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Ін'єкції">
+                    <TabItem Header="{DynamicResource Injection}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <GroupBox Grid.Column="1" Header="Main settings Injection">
+                            <GroupBox Grid.Column="1" Header="{DynamicResource MainSettings}">
                                 <Grid Background="LightGray">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -223,23 +228,23 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
-                                        <CheckBox IsChecked="{Binding AcceptInject}" Content="Дозволити ін'єкції" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                        <CheckBox x:Name="InjectSett" Grid.Column="1" Content="Поглиблені налаштування" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox IsChecked="{Binding AcceptInject}" Content="{DynamicResource AccInj}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <CheckBox x:Name="InjectSett" Grid.Column="1" Content="{DynamicResource BigInj}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
                                     </Grid>
                                     <TextBox Name="InjectLogin" Margin="5,5,5,5" Text="Login" Grid.Row="2"/>
                                     <TextBox Name="InjectPass" Margin="5,5,5,5" Text="Pass" Grid.Row="4"/>
-                                    <TextBlock Text="Логін" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource Login}" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
 
-                                    <TextBlock Text="Пароль" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
-                                    <GroupBox Header="Меню"  Grid.RowSpan="2" Grid.Row="5" >
+                                    <TextBlock Text="{DynamicResource Pass}" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
+                                    <GroupBox Header="{DynamicResource Menu}"  Grid.RowSpan="2" Grid.Row="5" >
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Button Content="Додати" Margin="5 5 5 5" Click="InjectAdd_Click"/>
-                                            <Button Click="InjectDelete_Click" Grid.Column="1" Content="Видалити" Margin="5 5 5 5"/>
+                                            <Button Content="{DynamicResource Add}" Margin="5 5 5 5" Click="InjectAdd_Click"/>
+                                            <Button Click="InjectDelete_Click" Grid.Column="1" Content="{DynamicResource Del}" Margin="5 5 5 5"/>
                                         </Grid>
                                     </GroupBox>
                                 </Grid>
@@ -249,12 +254,12 @@
                                     <RowDefinition Height="127*"/>
                                     <RowDefinition Height="62*"/>
                                 </Grid.RowDefinitions>
-                                <GroupBox Header="Всі користувачі">
+                                <GroupBox Header="{DynamicResource AllUser}">
                                     <ListBox Name="InjectItems">
 
                                     </ListBox>
                                 </GroupBox>
-                                <GroupBox Header="Поглиблені налаштування" Grid.Row="1" IsEnabled="{Binding ElementName=InjectSett, Path=IsChecked, Mode=TwoWay}">
+                                <GroupBox Header="{DynamicResource BigInj}" Grid.Row="1" IsEnabled="{Binding ElementName=InjectSett, Path=IsChecked, Mode=TwoWay}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="271*"/>
@@ -266,8 +271,8 @@
                                         </Grid.RowDefinitions>
                                         <TextBox Text="{Binding IpInject}" Margin="5 5 5 5" />
                                         <TextBox Text="{Binding PortInject}" Margin="5 5 5 5" Grid.Row="1"/>
-                                        <Label Content="Ip" Grid.Column="1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="Port" Grid.Column="1" Grid.Row="1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{DynamicResource Ip}" Grid.Column="1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="{DynamicResource Port}" Grid.Column="1" Grid.Row="1" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Grid>
                                 </GroupBox>
                             </Grid>
@@ -275,13 +280,13 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Налаштування Telegarm">
+                    <TabItem Header="{DynamicResource SettingsTelegram}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <GroupBox Grid.Column="1" Header="Головні налаштування">
+                            <GroupBox Grid.Column="1" Header="{DynamicResource MainSetWebServ}">
                                 <Grid Background="LightGray">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -292,25 +297,25 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox IsChecked="{Binding StatusTBot}" Content="Статус модулю TBot" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    <CheckBox IsChecked="{Binding StatusTBot}" Content="{DynamicResource StateTBot}" VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     <TextBox  Margin="5,5,5,5" Text="{Binding Apikey}" Grid.Row="2"/>
                                     <TextBox Name="TIDAdd"  Margin="5,5,5,5" Text="" Grid.Row="4"/>
-                                    <TextBlock Text="Api ключ" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource ApiKey}" FontSize="15" HorizontalAlignment="Center" Grid.Row ="1" VerticalAlignment="Center"/>
 
-                                    <TextBlock Text="T ID" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
-                                    <GroupBox Header="Menu"  Grid.RowSpan="2" Grid.Row="5" >
+                                    <TextBlock Text="{DynamicResource TID}" FontSize="15" HorizontalAlignment="Center"  Grid.Row ="3" VerticalAlignment="Center"/>
+                                    <GroupBox Header="{DynamicResource Menu}"  Grid.RowSpan="2" Grid.Row="5" >
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Button Click="TIDAdd_Click" Content="Add" Margin="5 5 5 5"/>
-                                            <Button Click="TIDDelete_Click" Grid.Column="1" Content="Delete" Margin="5 5 5 5"/>
+                                            <Button Click="TIDAdd_Click" Content="{DynamicResource Add}" Margin="5 5 5 5"/>
+                                            <Button Click="TIDDelete_Click" Grid.Column="1" Content="{DynamicResource Del}" Margin="5 5 5 5"/>
                                         </Grid>
                                     </GroupBox>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="Білий список ID">
+                            <GroupBox Header="{DynamicResource WLID}">
                                 <ListBox Name="TIDList">
 
                                 </ListBox>
@@ -318,7 +323,7 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Налаштування COM">
+                    <TabItem Header="{DynamicResource SettingsCOM}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -328,12 +333,12 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <GroupBox Header="Wifi PC" Grid.RowSpan="2" IsEnabled="{Binding ElementName=WifiPC, Path=IsChecked, Mode=TwoWay}">
+                            <GroupBox Header="{DynamicResource WPC}" Grid.RowSpan="2" IsEnabled="{Binding ElementName=WifiPC, Path=IsChecked, Mode=TwoWay}">
                                 <ListBox Name="PCClients">
-                                    
+
                                 </ListBox>
                             </GroupBox>
-                            <GroupBox Header="COM" Grid.Row="1" Grid.Column="1">
+                            <GroupBox Header="{DynamicResource COM}" Grid.Row="1" Grid.Column="1">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -345,14 +350,14 @@
                                 </Grid>
 
                             </GroupBox>
-                            <GroupBox Header="Main Settings PC" Grid.Column="1">
+                            <GroupBox Header="{DynamicResource MainSetWebServ}" Grid.Column="1">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <RadioButton GroupName="MSP" Name="ComPC" Content="Викорстовувати COM інтерфейс для під'єднання" IsChecked="True"/>
-                                    <RadioButton GroupName="MSP"  Grid.Row="1" Name="WifiPC" Content="Викорстовувати WIFI інтерфейс для під'єднання" IsChecked="False"/>
+                                    <RadioButton GroupName="MSP" Name="ComPC" Content="{DynamicResource ComPC}" IsChecked="True"/>
+                                    <RadioButton GroupName="MSP"  Grid.Row="1" Name="WifiPC" Content="{DynamicResource WifiPC}" IsChecked="False"/>
                                 </Grid>
 
                             </GroupBox>
@@ -360,6 +365,22 @@
                     </TabItem>
 
                 </TabControl>
+            </TabItem>
+            <TabItem Header="{DynamicResource SettingsApp}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Name="Lang"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

@@ -16,17 +16,17 @@
             <RowDefinition Height="115*" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
-            <MenuItem Header="Файл">
-                <MenuItem Header="Новый Проект" Click="MenuItem_Click_1"></MenuItem>
-                <MenuItem Header="Открыть Проект" Name="OldProject" ></MenuItem>
-                <MenuItem Header="Cохранить" Click="MenuItem_Click_2"/>
+            <MenuItem Header="{DynamicResource File}">
+                <MenuItem Header="{DynamicResource NewProj}" Click="MenuItem_Click_1"></MenuItem>
+                <MenuItem Header="{DynamicResource OpenProj}" Name="OldProject" ></MenuItem>
+                <MenuItem Header="{DynamicResource Save}" Click="MenuItem_Click_2"/>
                 <Separator />
-                <MenuItem Header="Выход" Click="MenuItem_Click_5" ></MenuItem>
+                <MenuItem Header="{DynamicResource Exit}" Click="MenuItem_Click_5" ></MenuItem>
             </MenuItem>
-            <MenuItem Header="Отладка">
-                <MenuItem Header="Собрать" Click="MenuItem_Click_3"/>
+            <MenuItem Header="{DynamicResource Debug}">
+                <MenuItem Header="{DynamicResource Compile}" Click="MenuItem_Click_3"/>
                 <Separator />
-                <MenuItem Header="Запустить" Click="MenuItem_Click_4"/>
+                <MenuItem Header="{DynamicResource Run}" Click="MenuItem_Click_4"/>
             </MenuItem>
 
         </Menu>

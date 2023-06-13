@@ -6,8 +6,8 @@
       xmlns:local="clr-namespace:MyAsistent.Windows"
       mc:Ignorable="d" 
       d:DesignHeight="160" d:DesignWidth="500"
-      Title="Voice Command">
-    <GroupBox Header="Голос">
+      Title="{DynamicResource Voice}">
+    <GroupBox Header="{DynamicResource Voice}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="55*"/>
@@ -15,8 +15,8 @@
                 <RowDefinition Height="148*"/>
             </Grid.RowDefinitions>
             <TextBox Name="Argumets" Grid.Row="1" Margin="2,2,2,2"></TextBox>
-            <TextBlock Text="Голос" FontSize="19" HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="50"/>
-            <Button Content="OK" Margin="5 5 5 5" Click="Button_Click" Grid.Row="2"></Button>
+            <TextBlock Text="{DynamicResource Voice}" FontSize="19" HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="50"/>
+            <Button Content="{DynamicResource OK}" Margin="5 5 5 5" Click="Button_Click" Grid.Row="2"></Button>
         </Grid>
     </GroupBox>
 

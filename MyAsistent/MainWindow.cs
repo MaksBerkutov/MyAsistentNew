@@ -336,6 +336,10 @@ namespace MyAsistent
 
 
             //inits
+            foreach(var item in MyAsistent.Lang.LanguageManager.Lang)
+                this.Lang.Items.Add(item);
+            this.Lang.SelectedIndex = 0;
+            Lang.SelectionChanged += Lang_SelectionChanged;
             MainSettings.Init();
             MainSettings.Load();
             InjectItems.ItemsSource = Account.accounts;
@@ -427,6 +431,13 @@ namespace MyAsistent
 
 
         }
+
+        private void Lang_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+           var SelLang = Lang.SelectedItem as MyAsistent.Lang.CultureLang;
+            App.LanguageManager.SelectedLanguage = SelLang.code;
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 

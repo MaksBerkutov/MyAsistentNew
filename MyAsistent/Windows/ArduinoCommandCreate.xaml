@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <GroupBox Header="Голвне">
+        <GroupBox Header="{DynamicResource Main}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="39*"/>
@@ -21,9 +21,9 @@
                     <RowDefinition Height="50*"/>
                     <RowDefinition Height="61*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="Строка виводу" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26" Width="117"   />
+                <TextBlock Text="{DynamicResource OutStr}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26" Width="195"   />
                 <TextBox Name="Command" Margin="2,2,2,2"    Grid.Row="1"/>
-                <Button Content="Додати"  Margin="2,2,2,2"  Click="Button_Click" Grid.Row="2"/>
+                <Button Content="{DynamicResource Add}"  Margin="2,2,2,2"  Click="Button_Click" Grid.Row="2"/>
                 <TextBox TextWrapping="Wrap" Grid.Row="3" Foreground="Red" FontSize="10">
                     !! Using syntax [NAME_VARIABLE_OUT_FOR_ARDUINO]
                     Example: Temperature [C] Date [D] . If C = 12, D = 12:12:2022.
@@ -32,7 +32,7 @@
 
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="1" Header="Модулі">
+        <GroupBox Grid.Column="1" Header="{DynamicResource Modul}">
             <Grid >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="173*"/>

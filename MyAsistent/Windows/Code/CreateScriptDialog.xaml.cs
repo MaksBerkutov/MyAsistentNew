@@ -64,6 +64,7 @@ namespace MyAsistent.Windows.Code
             
         ");
                 CodePage.Files.Add(Result);
+                this.Close();
               
             }
             catch (Exception ex)

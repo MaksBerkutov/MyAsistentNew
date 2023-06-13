@@ -17,10 +17,10 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="Имя" />
+        <Label Content="{DynamicResource Name}" />
         <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Background="LightGray" Margin="2 2 2 2" Name="File"/>
-        <Button IsEnabled="False" Grid.Row="1" Content="Путь" Margin="2 2 2 2" Click="Button_Click"/>
+        <Button IsEnabled="False" Grid.Row="1" Content="{DynamicResource Path}" Margin="2 2 2 2" Click="Button_Click"/>
         <TextBox IsEnabled="False" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Background="LightGray" Margin="2 2 2 2" Name="Path"/>
-        <Button Grid.Row="2" Content="Сохранить" Grid.ColumnSpan="3" Margin="2 2 2 2" Click="Button_Click_1"/>
+        <Button Grid.Row="2" Content="{DynamicResource Save}" Grid.ColumnSpan="3" Margin="2 2 2 2" Click="Button_Click_1"/>
     </Grid>
 </Window>

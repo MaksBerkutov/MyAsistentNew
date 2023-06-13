@@ -13,6 +13,7 @@ namespace MyAsistent
     /// </summary>
     public partial class App : Application
     {
+        public static Lang.LanguageManager LanguageManager { get; private set; }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             var Splash = new SplashScreen("Loadin.jpg");
@@ -20,6 +21,11 @@ namespace MyAsistent
             
             try
             {
+                LanguageManager = new Lang.LanguageManager();
+
+                // Установка начального языка
+                LanguageManager.SelectedLanguage = "ua"; // Здесь указывайте код выбранного языка
+
                 var item = new MainWindow();
                 item.InilizationApp();
                 item.Show();
