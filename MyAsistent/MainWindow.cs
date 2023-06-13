@@ -102,6 +102,14 @@ namespace MyAsistent
             });
 
         }
+        public void SyncronaizeInjection()
+        {
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                AcceptInject = MainSettings.StatusInject; OnPropertyChanged("AcceptInject");
+            });
+
+        }
         public void SyncronaizeServerGui()
         {
             try
@@ -272,6 +280,7 @@ namespace MyAsistent
             }
         }
     }
+    
     public partial class MainWindow : Window
     {
         public static Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
@@ -283,7 +292,21 @@ namespace MyAsistent
             Windows.Code.CodePage.Init();
             InitializeComponent();
             mainFrame.Navigate(new Windows.Code.MainPageCode());
+            
 
+            // Создать стиль для кнопки
+            var buttonStyle = new Style(typeof(Button));
+            buttonStyle.Setters.Add(new Setter(Button.BackgroundProperty, Brushes.Red));
+            buttonStyle.Setters.Add(new Setter(Button.ForegroundProperty, Brushes.White));
+
+            // Применить стиль к кнопкам в Grid
+            foreach (var child in contentGrid.Children)
+            {
+                if (child is Button button)
+                {
+                    button.Style = buttonStyle;
+                }
+            }
 
         }
 
@@ -328,11 +351,10 @@ namespace MyAsistent
         }
         public void InilizationApp()
         {
-          
+
 
 
             //Task.Delay(5000);
-
 
 
             //inits

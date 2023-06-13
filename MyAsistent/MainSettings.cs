@@ -43,7 +43,10 @@ namespace MyAsistent
             foreach (var item in accounts)
                 if (item.Login.Equals(l))
                     return false;
-            accounts.Add(new Account(l, p));return true;
+            App.Current.Dispatcher.Invoke(() =>
+                accounts.Add(new Account(l, p))
+            );
+            return true;
         }
         public static Account FindUser(string l,string p)
         {

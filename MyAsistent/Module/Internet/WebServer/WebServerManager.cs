@@ -159,11 +159,46 @@ namespace MyAsistent.Module.Internet.WebServer
 
             }
         }
+        public class InjectionModule : IHttpsRespones
+        {
+            public bool check;
+            public string login;
+            public string pass;
 
+            public InjectionModule()
+            {
+                this.check = MainSettings.StatusInject;
+                this.login = String.Empty;
+                this.pass = String.Empty;
+            }
+
+            public string Get()
+            {
+                return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            }
+
+            public void StartHandle() => MainWindow.date.SyncronaizeInjection();
+
+            public void Update(string Date)
+            {
+                var item = Newtonsoft.Json.JsonConvert.DeserializeObject<InjectionModule>(Date);
+                MainSettings.StatusInject = this.check = item.check;
+                if (login != item.login && item.login.Any() && item.pass.Any()) 
+                {
+                    login = item.login;
+                    App.Current.Dispatcher.Invoke(() => Account.Add(item.login, item.pass));
+
+                }
+
+
+
+            }
+        }
         static List<IHttpsRespones> ListClasses = new List<IHttpsRespones>()
         {
             new WebServerSettings(),
             new TelegramBotModule(),
+            new InjectionModule(),
             new ServerSettings()
         };
         //End

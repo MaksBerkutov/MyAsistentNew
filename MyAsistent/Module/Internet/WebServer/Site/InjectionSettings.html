@@ -9,6 +9,10 @@
 <link rel="stylesheet" href="InjectionSettings.css" media="screen">
     <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+	<!-- MY Js Adding Files  -->
+    <script src="MyJs/main.js"></script>
+    <script src="MyJs/InjectionPage.js"></script>
+    <!--    Logic End -->
     <meta name="generator" content="Nicepage 5.1.5, nicepage.com">
     <meta name="referrer" content="origin">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
@@ -24,7 +28,7 @@
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
   </head>
-  <body class="u-body u-xxl-mode" data-lang="ru"><header class="u-clearfix u-header u-valign-bottom-lg u-valign-bottom-md u-valign-bottom-sm u-valign-bottom-xl u-header" id="sec-f3fd"><img class="u-expanded-width u-image u-image-round u-radius-50 u-image-1" src="images/footer.svg" data-image-width="320" data-image-height="174"></header>
+  <body onload="Load()" class="u-body u-xxl-mode" data-lang="ru"><header class="u-clearfix u-header u-valign-bottom-lg u-valign-bottom-md u-valign-bottom-sm u-valign-bottom-xl u-header" id="sec-f3fd"><img class="u-expanded-width u-image u-image-round u-radius-50 u-image-1" src="images/footer.svg" data-image-width="320" data-image-height="174"></header>
     <section class="u-clearfix u-section-1" id="sec-8ce3">
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-align-center u-expanded-width u-form u-form-1">
@@ -43,13 +47,9 @@
             </div>
             <div class="u-align-left u-form-group u-form-submit u-label-top">
               <input type="submit" value="submit" class="u-form-control-hidden">
-              <a href="#" class="u-btn u-btn-submit u-button-style u-btn-1">Добавить/Обновить<br>
+              <a href="#" onclick="Change()" class="u-btn u-btn-submit u-button-style u-btn-1">Добавить/Обновить<br>
               </a>
             </div>
-            <div class="u-form-send-message u-form-send-success"> Спасибо! Ваше сообщение отправлено. </div>
-            <div class="u-form-send-error u-form-send-message"> Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз. </div>
-            <input type="hidden" value="" name="recaptchaResponse">
-            <input type="hidden" name="formServices" value="bdda4dcaf49ea92d973721311edef498">
           </form>
         </div>
       </div>

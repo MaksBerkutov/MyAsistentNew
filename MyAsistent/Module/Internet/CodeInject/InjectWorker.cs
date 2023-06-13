@@ -186,6 +186,7 @@ namespace MyAsistent.Module.Internet.CodeInject
                 Inject.Listen(10);
                 Inject.BeginAccept(
                 new AsyncCallback(AcceptCallbackUsers), null);
+                if(KillTimer==null) KillTimer = new DispatcherTimer();
                 KillTimer.Interval = MainSettings.CheckConnectServer;
                 KillTimer.Tick += KillTimer_Tick;
                 KillTimer.Start();
@@ -199,6 +200,7 @@ namespace MyAsistent.Module.Internet.CodeInject
         }
         public static void OffInject()
         {
+            if (KillTimer == null) return;
             KillTimer.Stop();
             KillTimer = null;
            if(Inject != null)
@@ -241,7 +243,7 @@ namespace MyAsistent.Module.Internet.CodeInject
             }
             catch (Exception ex )
             {
-              Logs.Log.Write(Logs.TypeLog.Error, ex.ToString());
+              Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
             }
            
         }

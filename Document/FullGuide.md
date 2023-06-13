@@ -272,4 +272,4 @@ namespace ConsoleApp7
 
 Відповідають за налштування мови серіеру.
 
-![Базова інформація боту](https://github.com/MaksBerkutov/MyAsistentNew/blob/master/ImageGit/SettingsApp.png)
+![Вигляд вікна](https://github.com/MaksBerkutov/MyAsistentNew/blob/master/ImageGit/SettingsApp.png)
