@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -13,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace MyAsistent
@@ -127,7 +129,21 @@ namespace MyAsistent
             }
           
         }
+        public void SyncronaizeMainGui()
+        {
+            try
+            {
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    
+                });
+            }
+            catch (Exception ex)
+            {
+                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+            }
 
+        }
 
         public bool AcceptInject
         {
@@ -284,6 +300,7 @@ namespace MyAsistent
     public partial class MainWindow : Window
     {
         public static Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+        public static MainWindow MainWindow_Static;
         public static MyData date;
         public Mutex mut = new Mutex();
         public Mutex mutWeb = new Mutex();
@@ -292,24 +309,38 @@ namespace MyAsistent
             Windows.Code.CodePage.Init();
             InitializeComponent();
             mainFrame.Navigate(new Windows.Code.MainPageCode());
-            
-
-            // Создать стиль для кнопки
-            var buttonStyle = new Style(typeof(Button));
-            buttonStyle.Setters.Add(new Setter(Button.BackgroundProperty, Brushes.Red));
-            buttonStyle.Setters.Add(new Setter(Button.ForegroundProperty, Brushes.White));
-
-            // Применить стиль к кнопкам в Grid
-            foreach (var child in contentGrid.Children)
-            {
-                if (child is Button button)
-                {
-                    button.Style = buttonStyle;
-                }
-            }
 
         }
+        
+        private string fierwarePath = string.Empty;
+        private void OpenFierware_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Binary Files (*.bin)|*.bin";
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                fierwarePath = openFileDialog.FileName;
+            }
+        }
+        private async void StartUpdateFierware_Click(object sender, RoutedEventArgs e)
+        {
+            if (ArduinoFierware.SelectedIndex != -1 && fierwarePath.Any())
+            {
+                //ArduinoClient
+                await Task.Run(async () =>
+                {
+                    await App.Current.Dispatcher.InvokeAsync(() => FierwareStatus.Text = "Updating");
+
+                    await App.Current.Dispatcher.InvokeAsync(() => FierwareStatus.Text =
+                    (sender as Module.Internet.ArduinoClient).OTAUpdate(System.IO.File.ReadAllBytes(fierwarePath)));
+                });
+
+            }
+            
+            
+        }
+        
         private void TIDAdd_Click(object sender, RoutedEventArgs e)
         {
            if(long.TryParse(TIDAdd.Text, out var res))
@@ -349,16 +380,46 @@ namespace MyAsistent
                 MainSettings.WaitForConectionDevice = New; MyAsistent.Module.Internet.InternetWorkerModule.StartServer();
             }
         }
+        public void SyncronizateMainSeetings()
+        {
+            App.Current.Dispatcher.Invoke(() => {
+                //Setings load
+                this.Settings_VoiceLog.IsChecked = MainSettings.VoiceLog;
+                this.Settings_VoiceMessage.IsChecked = MainSettings.VoiceMessage;
+                try
+                {
+                    this.Seting_SetSpechCulture.SelectedItem = MainSettings.SpeechCulture;
+                }
+                catch (Exception ex)
+                {
+                    Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                }
+                try
+                {
+                    this.Setting_SetSpeechVoice.SelectedItem = MainSettings.VoiceCulture;
+                }
+                catch (Exception ex)
+                {
+                    Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                }
+                MainSettings.Init();
+                SaveTime.Time = MainSettings.SaveCommandTime;
+                WaitTime.Time = MainSettings.WaitForConectionDevice;
+                Module.Internet.InternetWorkerModule.DispetcherClassesConection.Start();
+            });
+            
+
+        }
         public void InilizationApp()
         {
 
-
+            MainWindow_Static = this;
 
             //Task.Delay(5000);
 
 
             //inits
-            foreach(var item in MyAsistent.Lang.LanguageManager.Lang)
+            foreach (var item in MyAsistent.Lang.LanguageManager.Lang)
                 this.Lang.Items.Add(item);
             this.Lang.SelectedIndex = 0;
             Lang.SelectionChanged += Lang_SelectionChanged;

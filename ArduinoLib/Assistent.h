@@ -46,12 +46,16 @@ private:
     void ConnectToServere();
     void StandartHandler(String str);
     String Read();
+    #ifndef OTA
+    void ReadOTA();
+    #endif
     bool ThisStandartCommand(String str);
     void SendMessage(String msg);
 public:
+
     void Begin(String name, String *CMD, HandlerCMD *HandlerCMDS, int SizeCMD, String* CMDRec, HandlerCMDRec* HandlerCMDSRec, int SizeCMDRec, char *ssid, char *password, char *host, int port, int BhaudRate = 9600, OnNewMessageFromServer handler = NULL);
     AssistenWiFi();
-    void Reader();
+    void Reader(bool OTA = false);
     void CloseConnection();
 };
 #endif

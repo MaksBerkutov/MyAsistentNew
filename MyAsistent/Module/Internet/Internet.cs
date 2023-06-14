@@ -36,7 +36,9 @@ namespace MyAsistent.Module.Internet
         bool Connect { get; }
         bool UnCorrectPlate{ get; }
         void Send(string msg);
+        
         string SendAndRecive(string msg);
+       
         string ToString();
     }
     public abstract class InternetClient{
@@ -45,8 +47,9 @@ namespace MyAsistent.Module.Internet
         {
 
         }
-        
-       
+     
+
+
     }
     public class ArduinoClient : InternetClient, IInternetClient
     {
@@ -161,8 +164,13 @@ namespace MyAsistent.Module.Internet
                 return true;
         }
         public bool Connect => SocketConnected();
+        public string OTAUpdate(byte[] bin)
+        {
+            socket.Send(Encoding.ASCII.GetBytes("OTA"));
+            socket.Send(bin);
+            return Read();
+        }
 
-       
 
         public override string ToString() => $"{this.name}|({this.ip})";
     }

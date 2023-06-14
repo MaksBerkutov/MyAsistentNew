@@ -47,6 +47,31 @@ String AssistenWiFi::Read()
     Serial.print ("FIX MSG: "); Serial.println( (char *)sbuf);
   return str;
 }
+#ifndef OTA
+void AssistenWiFi::ReadOTA()
+{
+  size_t len = client.available();
+  if(len > ESP.getFreeSketchSpace()){
+      client.flush();
+      SendMessage("No free space or OTA");
+      return;
+  }
+   
+  size_t bytesWritten = 0;
+  while (client.available() && bytesWritten < len) {
+    uint8_t buffer[128];
+    size_t bytesRead = client.readBytes(buffer, sizeof(buffer));
+    bytesWritten += ESP.flashWrite(bytesWritten, buffer, bytesRead);
+  }  
+   if (bytesWritten == len) {
+          SendMessage("Sketch update complete");
+          // Выполните перезагрузку модуля NodeMCU
+          ESP.restart();
+        } else {
+          SendMessage("Error writing sketch to flash");
+        }
+}
+#endif
 bool AssistenWiFi::ThisStandartCommand(String str)
 {
   Serial.println("DEBUG ThisStandartCommand");
@@ -70,10 +95,13 @@ bool AssistenWiFi::ThisStandartCommand(String str)
   }
     
   else  if (strcmp(str.c_str(),  "SERV_GP")==0){
+
     Serial.print("DEBUG : ");Serial.print(str);Serial.print(" = ");Serial.println("SERV_GP");
     SendMessage("Arduino");
     return true;
     }
+    
+  
   else {
     Serial.println("DEBUG No finded standart command ");
     return false;
@@ -128,7 +156,7 @@ void AssistenWiFi::Begin(String name, String *CMD, HandlerCMD *HandlerCMDS,
   }
   ConnectToServere();
 }
-void AssistenWiFi::Reader()
+void AssistenWiFi::Reader(bool OTA)
 {
   Serial.println("Reader is start");
   if (client)
@@ -137,9 +165,20 @@ void AssistenWiFi::Reader()
     {
       while (client.available() > 0)
       {
+        #ifndef OTA
+        if(OTA){
+          ReadOTA();
+          return;
+        }
+         #endif
         String str = Read();
         Serial.print("I READ: ");
         Serial.println(str);
+         #ifndef OTA
+     if(strcmp(str.c_str(),  "OTA")==0){
+        Reader(true);
+  }
+    #endif
         if (!ThisStandartCommand(str))
           {
             StandartHandler(str);

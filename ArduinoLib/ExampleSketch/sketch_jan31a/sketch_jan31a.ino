@@ -1,3 +1,4 @@
+#define OTA
 #include <Assistent.h>
 byte PinLed = 2;
 #define ReleyPin1 D5

@@ -9,6 +9,10 @@
 <link rel="stylesheet" href="GeneralSettings.css" media="screen">
     <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+	<!-- MY Js Adding Files  -->
+    <script src="MyJs/main.js"></script>
+    <script src="MyJs/GeneralSettingsPage.js"></script>
+    <!--    Logic End -->
     <meta name="generator" content="Nicepage 5.1.5, nicepage.com">
     <meta name="referrer" content="origin">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
@@ -24,7 +28,7 @@
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
   </head>
-  <body class="u-body u-xxl-mode" data-lang="ru"><header class="u-clearfix u-header u-valign-bottom-lg u-valign-bottom-md u-valign-bottom-sm u-valign-bottom-xl u-header" id="sec-f3fd"><img class="u-expanded-width u-image u-image-round u-radius-50 u-image-1" src="images/footer.svg" data-image-width="320" data-image-height="174"></header>
+  <body onload="Load()" class="u-body u-xxl-mode" data-lang="ru"><header class="u-clearfix u-header u-valign-bottom-lg u-valign-bottom-md u-valign-bottom-sm u-valign-bottom-xl u-header" id="sec-f3fd"><img class="u-expanded-width u-image u-image-round u-radius-50 u-image-1" src="images/footer.svg" data-image-width="320" data-image-height="174"></header>
     <section class="u-clearfix u-section-1" id="sec-9f50">
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-align-center u-expanded-width u-form u-form-1">
@@ -41,7 +45,6 @@
               <label for="select-cc65" class="u-custom-font u-label u-text-black u-text-font">Язык голоса</label>
               <div class="u-form-select-wrapper">
                 <select id="select-cc65" name="select" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-50 u-white">
-                  <option value=""></option>
                 </select>
                 <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
               </div>
@@ -50,7 +53,6 @@
               <label for="select-6cb0" class="u-custom-font u-label u-text-black u-text-font">Язык синтезатора</label>
               <div class="u-form-select-wrapper">
                 <select id="select-6cb0" name="select-1" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-50 u-white">
-                  <option value=""></option>
                 </select>
                 <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
               </div>
@@ -58,24 +60,21 @@
             <div class="u-form-group u-form-number u-form-number-layout-number u-label-top u-form-group-5">
               <label for="number-6ca4" class="u-custom-font u-label u-text-black u-text-font">Время автосохранения</label>
               <div class="u-input-row">
-                <input value="0" min="0" max="100" step="1" type="number" placeholder="" id="number-6ca4" name="number" class="u-border-1 u-input u-number u-radius-50">
+                <input value="10" min="10" max="600" step="1" type="number" placeholder="" id="number-6ca4" name="number" class="u-border-1 u-input u-number u-radius-50">
               </div>
             </div>
             <div class="u-form-group u-form-number u-form-number-layout-number u-label-top u-form-group-6">
               <label for="number-86a0" class="u-custom-font u-label u-text-black u-text-font">Время ожидания инцилизации</label>
               <div class="u-input-row">
-                <input value="0" min="0" max="100" step="1" type="number" placeholder="" id="number-86a0" name="number" class="u-border-1 u-input u-number u-radius-50">
+                <input value="10" min="10" max="600" step="1" type="number" placeholder="" id="number-86a0" name="number" class="u-border-1 u-input u-number u-radius-50">
               </div>
             </div>
             <div class="u-align-left u-form-group u-form-submit u-label-top">
               <input type="submit" value="submit" class="u-form-control-hidden">
-              <a href="#" class="u-btn u-btn-round u-btn-submit u-button-style u-radius-11 u-btn-1">Обновить<br>
+              <a href="#" onclick="Change()" class="u-btn u-btn-round u-btn-submit u-button-style u-radius-11 u-btn-1">Обновить<br>
               </a>
             </div>
-            <div class="u-form-send-message u-form-send-success"> Спасибо! Ваше сообщение отправлено. </div>
-            <div class="u-form-send-error u-form-send-message"> Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз. </div>
-            <input type="hidden" value="" name="recaptchaResponse">
-            <input type="hidden" name="formServices" value="bdda4dcaf49ea92d973721311edef498">
+            
           </form>
         </div>
       </div>
