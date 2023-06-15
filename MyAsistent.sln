@@ -14,7 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{B7457F09-85FC-4E70-95FE-E8563233DB4F}"
 	ProjectSection(SolutionItems) = preProject
 		Document\FullGuide.md = Document\FullGuide.md
-		Document\MaksSiteInfo.md = Document\MaksSiteInfo.md
+		Document\MakeSiteInfo.md = Document\MakeSiteInfo.md
 		Document\ModuleSketchGuide.md = Document\ModuleSketchGuide.md
 		Readme.md = Readme.md
 	EndProjectSection
