@@ -30,7 +30,7 @@ class MainSettingsModule{
         document.getElementById('number-6ca4').value = this.timeAutoSave;
         document.getElementById('number-86a0').value = this.timeWaitIniit;
 		
-        var dropdown = document.getElementById('select-cc65'); // Получаем элемент выпадающего списка по его идентификатору
+        var dropdown = document.getElementById('select-cc65'); 
 		dropdown.options.length = 0;
 		for (var i = 0; i < this.AllRecognition.length; i++) {
 			var option = document.createElement('option');
@@ -39,7 +39,7 @@ class MainSettingsModule{
 		}
 		dropdown.value = this.CultureSpeech;
 		
-		var dropdownCultureRecognition = document.getElementById('select-6cb0'); // Получаем элемент выпадающего списка по его идентификатору
+		var dropdownCultureRecognition = document.getElementById('select-6cb0'); 
 		dropdownCultureRecognition.options.length = 0;
 		for (var i = 0; i < this.AllSpeech.length; i++) {
 			var option = document.createElement('option');

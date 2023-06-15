@@ -70,6 +70,7 @@
 
 - [Повна докуметація](https://github.com/MaksBerkutov/MyAsistentNew/blob/master/Document/FullGuide.md)
 - [Докуметація до скетчів](https://github.com/MaksBerkutov/MyAsistentNew/blob/master/Document/ModuleSketchGuide.md)
+- [Докуметація до написання сайту](https://github.com/MaksBerkutov/MyAsistentNew/blob/master/Document/MakeSiteInfo.md)
 
 ## Автори
 ---

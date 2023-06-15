@@ -15,7 +15,7 @@ class ServerSettings{
 	update() {
         document.getElementById('name-654f').value = this.ip;
         document.getElementById('email-654f').value = this.port;
-        var dropdown = document.getElementById('select-0f6d'); // Получаем элемент выпадающего списка по его идентификатору
+        var dropdown = document.getElementById('select-0f6d');
 		dropdown.options.length = 0;
 		for (var i = 0; i < this.ips.length; i++) {
 			var option = document.createElement('option');
