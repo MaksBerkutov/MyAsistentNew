@@ -100,9 +100,13 @@
     <sys:String x:Key="VoiceMsg">Озвучувати повідомлення</sys:String>
     <sys:String x:Key="TimeAutoSave">Час автозбереження</sys:String>
     <sys:String x:Key="TimeWaitInitModul">Час очікування підключення модулів</sys:String>
-    
-    
-    
+
+    <!-- OTA -->
+
+    <sys:String x:Key="OpenFierware">Відкрити файл оновлення</sys:String>
+    <sys:String x:Key="OtaUp">OTA оновлення</sys:String>
+    <sys:String x:Key="Update">Оновити</sys:String>
+
 
 
 

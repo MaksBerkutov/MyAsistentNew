@@ -157,7 +157,7 @@
 
                             </Grid.ColumnDefinitions>
 
-                            <GroupBox Header="OTA" Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                            <GroupBox Header="{DynamicResource OtaUp}" Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -166,10 +166,10 @@
                                         <RowDefinition/>
                                         
                                     </Grid.RowDefinitions>
-                                    
-                                    <Button Click="OpenFierware_Click" Content="Open Fierware" Margin="5 5 5 5"/>
+
+                                    <Button Click="OpenFierware_Click" Content="{DynamicResource OpenFierware}" Margin="5 5 5 5"/>
                                     <ComboBox Name="ArduinoFierware" ItemsSource="{Binding ElementName=ArduinoSocketUsersComboBox, Path=ItemsSource}" Grid.Row="1" Margin="5 5 5 5"/>
-                                    <Button Click="StartUpdateFierware_Click" Content="Update" Grid.Row="2" Margin="5 5 5 5"/>
+                                    <Button Click="StartUpdateFierware_Click" Content="{DynamicResource Update}" Grid.Row="2" Margin="5 5 5 5"/>
                                     <TextBlock Name="FierwareStatus" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" FontSize="25"  Grid.Row="3" Margin="5 5 5 5"/>
                                 </Grid>
                             </GroupBox>

@@ -98,4 +98,9 @@
     <sys:String x:Key="VoiceMsg">Voice message</sys:String>
     <sys:String x:Key="TimeAutoSave">Autosave time</sys:String>
     <sys:String x:Key="TimeWaitInitModul">Waiting time for connecting modules</sys:String>
+    <!--OTA -->
+
+    <sys:String x:Key="OpenFierware">Open Update File</sys:String>
+    <sys:String x:Key="OtaUp">OTA Upgrade</sys:String>
+    <sys:String x:Key="Update">Update</sys:String>
 </ResourceDictionary>
