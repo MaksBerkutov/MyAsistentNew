@@ -309,9 +309,7 @@ namespace MyAsistent.Module.Internet.WebServer
                 if(Listener != null)
                     Listener.Stop();
               
-               Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "\n<==========<Info>==========>");
-               Logs.Log.WriteWeb(Logs.TypeLog.Message, "Сервер успешно выключен!");
-               Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "<==========================>");
+               Logs.Log.WriteWeb(Logs.TypeLog.Message, "Веб сервер успешно выключен!");
 
             
               
@@ -347,12 +345,8 @@ namespace MyAsistent.Module.Internet.WebServer
 
                         Listener.BeginGetContext(GetContextCallback, null);
                    
-                        Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "\n<==========<Info>==========>");
-                        Logs.Log.WriteWeb(Logs.TypeLog.Message, "Сервер успешно запущен!");
-                        Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Главный URL: {MainSettings.MainPrefix}");
-                        Logs.Log.WriteWeb(Logs.TypeLog.Message, $"JSON URL: {MainSettings.MainPrefix + "json/"}");
-                        Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Корень сайта: {MainSettings.MainFolder}");
-                        Logs.Log.WriteWeb(Logs.TypeLog.Graphics, " <==========================>");
+                        Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Веб сервер успешно запущен ({MainSettings.MainPrefix}) !");
+                      
 
                     
                         
@@ -380,22 +374,27 @@ namespace MyAsistent.Module.Internet.WebServer
             {
                 var buffer = Encoding.UTF8.GetBytes("{ }");
                 JObject MainObject = JObject.Parse(new StreamReader(context.Request.InputStream).ReadToEnd());
-                Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Пришло с сервера  = {MainObject}");
+                //Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Пришло с сервера  = {MainObject}");
                 if (MainObject.Value<string>("action") == "update")
                 {
                     var res = ListClasses.Find(p =>
                     p.GetType().Name.Equals(MainObject.Value<string>("name")
                     ));
+                    Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Запрос на обновление страници {res.GetType().Name}");
                     res.Update(MainObject.Value<string>("date"));
                     res.StartHandle();
                 }
                 else
+                {
+                    Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Запрос на получение данных для страници {MainObject.Value<string>("name")}");
                     buffer = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(ListClasses.
-                        Find(p =>
-                        {
-                            return p.GetType().Name.Equals(MainObject.Value<string>("name"));
-                        }
-                        ).Get()));
+                                           Find(p =>
+                                           {
+                                               return p.GetType().Name.Equals(MainObject.Value<string>("name"));
+                                           }
+                                           ).Get()));
+                }
+                   
 
                 context.Response.ContentType = ConetneType["json"];
                 context.Response.ContentLength64 = buffer.Length;
@@ -452,11 +451,9 @@ namespace MyAsistent.Module.Internet.WebServer
                 Listener.BeginGetContext(GetContextCallback, null);
                 var NowTime = DateTime.UtcNow;
                 
-                    Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "<==========<Read>==========>");
-                    Logs.Log.WriteWeb(Logs.TypeLog.Message, $"{NowTime.ToString("R")}: {context.Request.RawUrl}");
-                    Logs.Log.WriteWeb(Logs.TypeLog.Message, $"URL: {context.Request.Url.OriginalString}");
-                    Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Raw URL: {context.Request.RawUrl}");
-                    Logs.Log.WriteWeb(Logs.TypeLog.Graphics, "<==========================>");
+                    
+                    Logs.Log.WriteWeb(Logs.TypeLog.Message, $"Запрос с {context.Request.Url.OriginalString}");
+
              
                 
 

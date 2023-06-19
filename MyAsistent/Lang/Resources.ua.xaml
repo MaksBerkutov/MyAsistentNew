@@ -96,6 +96,15 @@
     <sys:String x:Key="OpenProj">Відкрити проект</sys:String>
 
 
+    <sys:String x:Key="VoiceLog">Озвучувати журнал</sys:String>
+    <sys:String x:Key="VoiceMsg">Озвучувати повідомлення</sys:String>
+    <sys:String x:Key="TimeAutoSave">Час автозбереження</sys:String>
+    <sys:String x:Key="TimeWaitInitModul">Час очікування підключення модулів</sys:String>
+    
+    
+    
+
+
 
 
 

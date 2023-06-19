@@ -178,6 +178,7 @@
       <DependentUpon>TimePicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logs\TypeLog.cs" />
+    <Compile Include="Theme\ThemeChanger.cs" />
     <Compile Include="Windows\AddItem.xaml.cs">
       <DependentUpon>AddItem.xaml</DependentUpon>
     </Compile>
@@ -209,6 +210,14 @@
     <Compile Include="Windows\Page_Add_PathModule.xaml.cs">
       <DependentUpon>Page_Add_PathModule.xaml</DependentUpon>
     </Compile>
+    <Page Include="Theme\DarkTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Theme\DefaultTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Lang\Resources.en.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

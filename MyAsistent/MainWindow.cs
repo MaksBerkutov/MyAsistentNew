@@ -299,6 +299,7 @@ namespace MyAsistent
     
     public partial class MainWindow : Window
     {
+        
         public static Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
         public static MainWindow MainWindow_Static;
         public static MyData date;
@@ -309,6 +310,7 @@ namespace MyAsistent
             Windows.Code.CodePage.Init();
             InitializeComponent();
             mainFrame.Navigate(new Windows.Code.MainPageCode());
+            
 
         }
         
@@ -332,8 +334,8 @@ namespace MyAsistent
                 {
                     await App.Current.Dispatcher.InvokeAsync(() => FierwareStatus.Text = "Updating");
 
-                    await App.Current.Dispatcher.InvokeAsync(() => FierwareStatus.Text =
-                    (sender as Module.Internet.ArduinoClient).OTAUpdate(System.IO.File.ReadAllBytes(fierwarePath)));
+                    await App.Current.Dispatcher.InvokeAsync(async () => FierwareStatus.Text =
+                    await (ArduinoFierware.SelectedItem as Module.Internet.ArduinoClient).OTAUpdate(fierwarePath));
                 });
 
             }

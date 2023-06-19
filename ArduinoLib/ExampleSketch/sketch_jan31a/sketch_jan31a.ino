@@ -74,7 +74,7 @@ AssistenWiFi assistent;
 void setup() {
 pinMode(PinLed,OUTPUT);pinMode(ReleyPin1,OUTPUT);pinMode(ReleyPin2,OUTPUT);
 
-  assistent.Begin(NameBoard,CMD,HCmd,6,CMDRec,HCmdRec,1,(char*)"TP-Link_3112",(char*)"07012004",(char*)"192.168.2.102",11000);
+  assistent.Begin(NameBoard,CMD,HCmd,6,CMDRec,HCmdRec,1,(char*)"Homenet143062",(char*)"0968651978",(char*)"192.168.1.9",11000);
 
 }
 

@@ -48,7 +48,10 @@
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource Script}">
-                <Frame x:Name="mainFrame" />
+                <Grid>
+                    <Frame x:Name="mainFrame" />
+                </Grid>
+               
             </TabItem>
             <TabItem Header="{DynamicResource Settings}">
                 <TabControl>
@@ -67,8 +70,8 @@
                             </Grid.ColumnDefinitions>
                             <ComboBox Name="Seting_SetSpechCulture" Margin="0,15,15,15" SelectionChanged="Setting_Seting_SetSpechCulture"  Grid.Row="0" Grid.ColumnSpan="2" />
                             <ComboBox Name="Setting_SetSpeechVoice" Margin="0,15,15,15" SelectionChanged="Setting_SetSpeechVoice_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="2"/>
-                            <CheckBox Name="Settings_VoiceLog" Margin="0,15,15,15" IsChecked="False" Grid.Row="2" Content="Озвучувати журнал" Click="Settings_VoiceLog_Click" Grid.ColumnSpan="2"/>
-                            <CheckBox Name="Settings_VoiceMessage" Margin="0,15,15,15" IsChecked="True" Grid.Row="3" Content="Озвучувати повідомлення" Click="Settings_VoiceMessage_Click" Grid.ColumnSpan="2"/>
+                            <CheckBox Name="Settings_VoiceLog" Margin="0,15,15,15" IsChecked="False" Grid.Row="2" Content="{DynamicResource VoiceLog}" Click="Settings_VoiceLog_Click" Grid.ColumnSpan="2"/>
+                            <CheckBox Name="Settings_VoiceMessage" Margin="0,15,15,15" IsChecked="True" Grid.Row="3" Content="{DynamicResource VoiceMsg}" Click="Settings_VoiceMessage_Click" Grid.ColumnSpan="2"/>
                             <ListBox Name="listCultureText" Grid.Column="2" Grid.RowSpan="2" MouseDoubleClick="ListCultureText_MouseDoubleClick"/>
 
 
@@ -78,14 +81,14 @@
                                     <RowDefinition Height="29*"/>
                                 </Grid.RowDefinitions>
                                 <tp:TimePicker  x:Name="SaveTime" ChangeTimePickerHandler="ChangeTimePicker_SaveTime" />
-                                <TextBlock Text="Час автозбереження" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
+                                <TextBlock Text="{DynamicResource TimeAutoSave}" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
                             </Grid>
                             <Grid Grid.Row="3" Grid.Column="2">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="66*"/>
                                     <RowDefinition Height="29*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="Час очікування підключення модулів" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
+                                <TextBlock Text="{DynamicResource TimeWaitInitModul}" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
                                 <tp:TimePicker  x:Name="WaitTime" ChangeTimePickerHandler="ChangeTimePicker_WaitTime"/>
                             </Grid>
 

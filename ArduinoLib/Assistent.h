@@ -47,6 +47,7 @@ private:
     void StandartHandler(String str);
     String Read();
     #ifndef OTA
+
     void ReadOTA();
     #endif
     bool ThisStandartCommand(String str);

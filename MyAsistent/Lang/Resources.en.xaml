@@ -93,4 +93,9 @@
     <sys:String x:Key="Exit">Exit</sys:String>
     <sys:String x:Key="NewProj">New Project</sys:String>
     <sys:String x:Key="OpenProj">Open Project</sys:String>
+
+    <sys:String x:Key="VoiceLog">Voice log</sys:String>
+    <sys:String x:Key="VoiceMsg">Voice message</sys:String>
+    <sys:String x:Key="TimeAutoSave">Autosave time</sys:String>
+    <sys:String x:Key="TimeWaitInitModul">Waiting time for connecting modules</sys:String>
 </ResourceDictionary>

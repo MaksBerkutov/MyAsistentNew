@@ -48,28 +48,40 @@ String AssistenWiFi::Read()
   return str;
 }
 #ifndef OTA
+
 void AssistenWiFi::ReadOTA()
 {
   size_t len = client.available();
+    Serial.print("Len UPDATE ");
+    Serial.println(len);
+     Serial.print("FreeSpace ");
+    Serial.println(ESP.getFreeSketchSpace());
   if(len > ESP.getFreeSketchSpace()){
       client.flush();
       SendMessage("No free space or OTA");
+       Serial.print("No free space or OTA");
       return;
   }
    
-  size_t bytesWritten = 0;
-  while (client.available() && bytesWritten < len) {
-    uint8_t buffer[128];
-    size_t bytesRead = client.readBytes(buffer, sizeof(buffer));
-    bytesWritten += ESP.flashWrite(bytesWritten, buffer, bytesRead);
-  }  
-   if (bytesWritten == len) {
-          SendMessage("Sketch update complete");
-          // Выполните перезагрузку модуля NodeMCU
-          ESP.restart();
-        } else {
-          SendMessage("Error writing sketch to flash");
-        }
+  
+    uint8_t buffer[len];
+    client.readBytes(buffer, len);
+    size_t bytesWritten = 0;
+  const size_t blockSize = 4096; // Размер блока записи (может варьироваться в зависимости от платформы и настроек)
+Serial.print("start update len: ");
+    Serial.println(len);
+  while (bytesWritten < len) {
+    
+    size_t bytesToWrite = min(len - bytesWritten, blockSize);
+    ESP.flashWrite(bytesWritten, buffer + bytesWritten, bytesToWrite);
+    bytesWritten += bytesToWrite;
+    Serial.print("Written: ");
+    Serial.println(bytesWritten);
+  }
+    
+   SendMessage("Sketch update complete");
+   Serial.println("Sketch update complete");
+   ESP.restart();
 }
 #endif
 bool AssistenWiFi::ThisStandartCommand(String str)
@@ -176,6 +188,7 @@ void AssistenWiFi::Reader(bool OTA)
         Serial.println(str);
          #ifndef OTA
      if(strcmp(str.c_str(),  "OTA")==0){
+      Serial.print("start ota update ");
         Reader(true);
   }
     #endif

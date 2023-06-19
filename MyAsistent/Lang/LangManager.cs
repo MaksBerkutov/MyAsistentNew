@@ -42,9 +42,7 @@ namespace MyAsistent.Lang
 
         private void UpdateLanguageResources()
         {
-            // Здесь вы можете выполнить логику для переключения языка и обновления ресурсов приложения
-
-            // Пример: перезагрузка словаря ресурсов
+            
             Application.Current.Resources.MergedDictionaries.Clear();
             var resourceDictionary = new ResourceDictionary();
             resourceDictionary.Source = new Uri($"Lang/Resources.{SelectedLanguage}.xaml", UriKind.Relative);
