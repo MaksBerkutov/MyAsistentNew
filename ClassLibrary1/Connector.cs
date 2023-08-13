@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -7,6 +8,49 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 namespace InjectionAsistent
 {
+    public class AssistentVariable
+    {
+        string name;
+        string value;
+
+        public AssistentVariable(string name, string value)
+        {
+            this.name = name;
+            this.value = value;
+        }
+
+        public string Name => name;
+        public string Value => value;
+
+    }
+    public class AsistenetVariableManager
+    {
+        List<AssistentVariable> items;
+
+        public AsistenetVariableManager()
+        {
+            items = new List<AssistentVariable>();
+        }
+
+        public AssistentVariable this[int i] => items[i];
+        public AssistentVariable this[string i] => items.Find(x => x.Name == i);
+        public class AssistentVariable
+        {
+            string name;
+            string value;
+
+            public AssistentVariable(string name, string value)
+            {
+                this.name = name;
+                this.value = value;
+            }
+
+            public string Name => name;
+            public string Value => value;
+
+        }
+        public void add(AssistentVariable obj) => items.Add(obj);
+    }
     public class PacketDevice
     {
         public string PublicKey { get; set; }
@@ -135,6 +179,32 @@ namespace InjectionAsistent
         {
             ConnectToServer();
             Auntification();
+        }
+
+        public void Voice(string VoiceToSpech) => SendPacket(Newtonsoft.Json.JsonConvert.SerializeObject(new string[] { "Voice", VoiceToSpech})); 
+
+        public void SendArduino(string NamePlate, string Command) => SendPacket(Newtonsoft.Json.JsonConvert.SerializeObject(new string[] { "Arduino", NamePlate, Command }));
+        
+        private AsistenetVariableManager ConvertStringToManager(string input)
+        {
+            var item = input.Split('_');
+            AsistenetVariableManager obj = new AsistenetVariableManager();
+            foreach (var i in item)
+            {
+                var name = i.Split(':')[0];
+                name = name.Remove(0, 1);
+                name = name.Remove(name.Length - 1, 1);
+                obj.add(new AsistenetVariableManager.AssistentVariable(name, i.Split(':')[1]));
+            }
+            return obj;
+        }
+
+        public AsistenetVariableManager SendArduinoRecive(string NamePlate, string Command)
+        {
+            SendPacket(Newtonsoft.Json.JsonConvert.SerializeObject(new string[] { "ArduinoDate", NamePlate, Command }));
+            var decrypt = this.DecryptDate(this.ReadDate());
+           
+            return this.ConvertStringToManager(decrypt.Date);
         }
     }
     
