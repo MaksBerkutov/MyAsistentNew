@@ -177,7 +177,7 @@ namespace MyAsistent.Module.Internet.CodeInject
         public static void INIT()
         {
             IPHostEntry host = Dns.GetHostEntry(MainSettings.IpInject);
-            IPAddress ipAddress = host.AddressList[0];
+            IPAddress ipAddress = host.AddressList[MainSettings.AddresListIDServer];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, MainSettings.PortInject);
             try
             {

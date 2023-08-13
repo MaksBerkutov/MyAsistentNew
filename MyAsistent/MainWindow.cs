@@ -334,8 +334,8 @@ namespace MyAsistent
                 {
                     await App.Current.Dispatcher.InvokeAsync(() => FierwareStatus.Text = "Updating");
 
-                    await App.Current.Dispatcher.InvokeAsync(async () => FierwareStatus.Text =
-                    await (ArduinoFierware.SelectedItem as Module.Internet.ArduinoClient).OTAUpdate(fierwarePath));
+                    await App.Current.Dispatcher.InvokeAsync(async () => await Task.Run(()=>FierwareStatus.Text =
+                    (ArduinoFierware.SelectedItem as Module.Internet.ArduinoClient).OTAUpdate(fierwarePath)));
                 });
 
             }
@@ -427,7 +427,7 @@ namespace MyAsistent
             Lang.SelectionChanged += Lang_SelectionChanged;
             MainSettings.Init();
             MainSettings.Load();
-            InjectItems.ItemsSource = Account.accounts;
+            InjectItems.ItemsSource = Account.Accounts;
             SaveTime.Time = MainSettings.SaveCommandTime;
             WaitTime.Time = MainSettings.WaitForConectionDevice;
             Module.Sound.Sound.Init();
