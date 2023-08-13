@@ -152,8 +152,8 @@ namespace MyAsistent
             {
                 acceptInject = value;
                 MainSettings.StatusInject = value;
-                if (value) Module.Internet.CodeInject.InjectWorker.INIT();
-                else Module.Internet.CodeInject.InjectWorker.OffInject();
+                if (value) Module.Internet.CodeInject.Injection.StartServer();
+                else Module.Internet.CodeInject.Injection.CloseServer();
             }
         }
         public bool StatusTBot

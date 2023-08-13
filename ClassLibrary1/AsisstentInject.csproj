@@ -44,8 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Worker.cs" />
-    <Compile Include="Conection.cs" />
     <Compile Include="Connector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
