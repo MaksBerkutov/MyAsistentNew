@@ -3,194 +3,321 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Windows.Threading;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 
 namespace MyAsistent.Module.Internet.CodeInject
 {
-    class Pakage
+    public class PacketDevice
     {
-        public string Key { get; set; }
-        public string Reqest { get; set; }
-        public string Resume { get; set; }
+        public string PublicKey { get; set; }
+        public string Date { get; set; }
+
+        private static PacketDevice CreateFromRegex(MatchCollection matches)
+        {
+            return new PacketDevice() { PublicKey = matches[0].Groups[1].Value, Date = matches[1].Groups[1].Value };
+        }
+
+        public static PacketDevice ConvertFromString(string input)
+        {
+            string pattern = @"\[(.*?)\]";
+            MatchCollection matches = Regex.Matches(input, pattern);
+            if (matches.Count == 2)
+                return CreateFromRegex(matches);
+
+            return null;
+        }
+
+        public override string ToString() => $"[{this.PublicKey}][{this.Date}]";
     }
 
-    public static  class InjectWorker
+    public class ObjectDevice
     {
-        private static Dictionary <string , ItemInjection > GeneretedKeySesion = new Dictionary<string, ItemInjection>();
+        public string Command;
+        public List<string> Args;
 
-        private static Random random = new Random();
-        private readonly static int KeyLenght = 8;
-        public static string GenerateKey()
+        public ObjectDevice(List<string> Input)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZqwertyuiopasdfghjklmnbvcxz0123456789";
-            return new string(Enumerable.Repeat(chars, KeyLenght)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            if (Input == null || Input.Count == 0)
+            {
+                throw new ArgumentException("Input list is null or empty.");
+            }
+
+            Command = Input.FirstOrDefault();
+            Args = Input.Skip(1).ToList();
         }
-        class ItemInjection
+    }
+
+    public class Device
+    {
+        public string SessionLogin { get; set; }
+
+        private Socket Connection;
+
+        private string PublicKey;
+        private string PrivateKey;
+
+        private const int BUFFER_SIZE = 2048;
+        private static readonly byte[] buffer = new byte[BUFFER_SIZE];
+
+        private string GenerateKeys()
         {
-            public string KeySesion { get; set; }
-            public string LoginOfSession { get; set; }
-            public void Close() => Account.CloseConnection(LoginOfSession);
-            private  Socket Conn;
-            private string MyKey;
-            private const int BUFFER_SIZE = 2048;
-            private static readonly byte[] buffer = new byte[BUFFER_SIZE];
-            public bool SocketConnected()
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
-                try
-                {
-                    bool part1 = Conn.Poll(1000, SelectMode.SelectRead);
-                    bool part2 = (Conn.Available == 0);
-                    if (part1 && part2)
-                        return false;
-                    else
-                        return true;
-                }
-                catch (Exception)
-                {
 
-                    return false;
-                }
-               
+                PrivateKey = rsa.ToXmlString(true);
+                return rsa.ToXmlString(false);
             }
-
-            public delegate void delKil(ItemInjection obj);
-            DispatcherTimer KillerTime;
-            public event delKil KillMe;
-            public ItemInjection(Socket Conn)
-            {
-                this.Conn = Conn;
-               
-
-                this.Conn.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, this.Conn);
-
-
-            }
-            private  void ReceiveCallback(IAsyncResult AR)
-            {
-                Socket current = (Socket)AR.AsyncState;
-                int received;
-
-                try
-                {
-                    received = current.EndReceive(AR);
-                }
-                catch (SocketException)
-                {
-                    current.Close();
-                    
-                    return;
-                }
-
-                byte[] recBuf = new byte[received];
-                Array.Copy(buffer, recBuf, received);
-                var strJson = Encoding.UTF8.GetString(recBuf);
-                if (strJson.Split('{').Length > 2)
-                {
-                    MultiplateWorker(strJson);return;
-                }
-                var pak = Newtonsoft.Json.JsonConvert.DeserializeObject<Pakage>(strJson);
-                var Decode = GetInfo(pak.Reqest);
-                if (Decode.Key == "Auth")
-                {
-                    AuthModule(Decode, pak);
-                }
-                else
-                {
-                    Worker(Decode, pak);
-                }
-
-               if(Conn!=null)   
-                 current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
-            }
-            private void MultiplateWorker(string strMulti)
-            {
-                var AllCmd = strMulti.Split('{');
-                foreach(var strJson in AllCmd)
-                {
-                    if (strJson.Length == 0) continue;
-                    var pak = Newtonsoft.Json.JsonConvert.DeserializeObject<Pakage>($"{{{strJson}");
-                    var Decode = GetInfo(pak.Reqest);
-                    if (Decode.Key == "Auth")
-                    {
-                        if (!AuthModule(Decode, pak)) return ;
-                    }
-                    else
-                    {
-                        Worker(Decode, pak);
-                    }
-                }
-            }
-            private static  (string Key, string[] Arg) GetInfo(string req)
-            {
-                return(req.Split('=')[0],req.Split('=')[1].Split(','));
-            }
-            private  bool AuthModule((string Key, string[] Arg) Obj,Pakage pkj)
-            {
-                var finded = Account.FindUser(Obj.Arg[0], Obj.Arg[1]);
-                if (finded == null||finded.Connection) { pkj.Reqest = "false"; Send(pkj); Conn.Close();Conn.Dispose(); Conn = null; return false; }
-                while (true)
-                {
-                   
-                    var key = GenerateKey();
-                    if (GeneretedKeySesion.TryGetValue(key, out var val)) { continue; }
-                    GeneretedKeySesion.Add(key, this);
-                    MyKey = pkj.Reqest = key; Send(pkj);
-                    LoginOfSession = Obj.Arg[0];
-                    finded.OpenCoonnection();
-                    return true;
-                }
-
-            }
-            private void Worker((string Key, string[] Arg) Obj, Pakage pkj)
-            {
-                switch (Obj.Key)
-                {
-                    case "Voice":
-                        Sound.Voice.PlayRuAsync(Obj.Arg[0]);
-                        break;
-                    case "Arduino":
-                        InternetWorkerModule.SendToClent(Obj.Arg[0], Obj.Arg[1]);break;
-                    case "ArduinoDate":
-                        if(InternetWorkerModule.SendToClinetRecive(Obj.Arg[0], Obj.Arg[1],out var res))
-                        {
-                            pkj.Resume = res;Send(pkj); return;
-                        }
-                        else
-                        {
-                            pkj.Resume = "NULL"; Send(pkj); return;
-                        }
-                       
-                }
-            }
-      
-            private void Send(Pakage pk)=>Conn.Send(Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(pk)));
-           
-
         }
-        private static Socket Inject;
-        private static DispatcherTimer KillTimer = new DispatcherTimer();
-        private static List<ItemInjection> InjectionsList = new List<ItemInjection>();
-        public static void INIT()
+
+        private bool CheckConnected()
         {
-            IPHostEntry host = Dns.GetHostEntry(MainSettings.IpInject);
-            IPAddress ipAddress = host.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, MainSettings.PortInject);
+            bool part1 = Connection.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (Connection.Available == 0);
+            if (part1 && part2)
+                return false;
+            else
+                return true;
+        }
+
+        public bool isConnected()
+        {
             try
             {
-                Inject = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                Inject.Bind(localEndPoint);
-                Inject.Listen(10);
-                Inject.BeginAccept(
-                new AsyncCallback(AcceptCallbackUsers), null);
-                if(KillTimer==null) KillTimer = new DispatcherTimer();
-                KillTimer.Interval = MainSettings.CheckConnectServer;
-                KillTimer.Tick += KillTimer_Tick;
-                KillTimer.Start();
-                Logs.Log.Write(Logs.TypeLog.Message, $"Inject stared at {Inject.LocalEndPoint}!");
+                return CheckConnected();
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+        }
+
+        public void CloseDevicesConnection()
+        {
+            Account.CloseConnection(SessionLogin);
+            Connection.Dispose();
+        }
+
+        private void SendPacket(string Date)
+        {
+            Date = Date == string.Empty ? string.Empty : EncryptWithPublicKey(Date);
+            Connection.Send(Encoding.UTF8.GetBytes(
+             new PacketDevice() { Date = Date, PublicKey = GenerateKeys() }
+             .ToString()));
+        }
+
+        public Device(Socket Connection)
+        {
+            this.Connection = Connection;
+
+            this.Connection.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, this.Connection);
+
+            this.SendPacket(string.Empty);
+        }
+
+        private PacketDevice Recive(IAsyncResult AR)
+        {
+            Socket current = (Socket)AR.AsyncState;
+            int received = current.EndReceive(AR);
+            byte[] recBuf = new byte[received];
+            Array.Copy(buffer, recBuf, received);
+            var readString = Encoding.UTF8.GetString(recBuf);
+            return PacketDevice.ConvertFromString(readString);
+        }
+
+        private void ReceiveCallback(IAsyncResult AR)
+        {
+            try
+            {
+                PacketDevice ReciveDate = Recive(AR);
+                ConvertDatePackets(ReciveDate);
+                if (Connection != null)
+                    Connection.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, Connection);
+            }
+            catch (SocketException ex)
+            {
+                //Add Log Function
+                Connection.Close();
+            }
+            
+        }
+
+        private string EncryptWithPublicKey(string plainText)
+        {
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+            {
+                rsa.FromXmlString(PublicKey);
+                byte[] data = Encoding.UTF8.GetBytes(plainText);
+                byte[] encryptedData = rsa.Encrypt(data, false);
+                return Convert.ToBase64String(encryptedData);
+            }
+        }
+
+        private string DecryptWithPrivateKey(string encryptedText)
+        {
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+            {
+                rsa.FromXmlString(PrivateKey);
+                byte[] encryptedData = Convert.FromBase64String(encryptedText);
+                byte[] decryptedData = rsa.Decrypt(encryptedData, false);
+                return Encoding.UTF8.GetString(decryptedData);
+            }
+        }
+
+        private void ConvertDatePackets(PacketDevice InputPacket)
+        {
+            if (InputPacket.Date.Any())
+            {
+                this.PublicKey = InputPacket.PublicKey;
+                ObjectDevice DecryptDate = new ObjectDevice(Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(DecryptWithPrivateKey(InputPacket.Date)));
+                HandlerCommand(DecryptDate);
+            }
+
+        }
+
+        private void Authentication(Account Arg)
+        {
+            if (Arg == null || Arg.Connection)
+            {
+                this.SendPacket("false");
+                this.Connection.Dispose();
+                Connection = null;
+                return;
+            }
+            SessionLogin = Arg.Login;
+            this.SendPacket(Arg.Login);
+        }
+
+        private void Authentication(List<string> Arg)
+        {
+            if(Arg.Count == 2)
+                Authentication(Account.FindUser(Arg[0], Arg[1]));
+                /*
+                0 index = Login
+                1 index = Password
+                */
+        }
+
+        private void HandlerCommand(ObjectDevice Obj)
+        {
+            switch (Obj.Command)
+            {
+                case "Authentication":
+                    Authentication(Obj.Args);
+                    break;
+                case "Voice":
+                    Sound.Voice.PlayRuAsync(Obj.Args[0]);
+                    break;
+                case "Arduino":
+                    InternetWorkerModule.SendToClent(Obj.Args[0], Obj.Args[1]);
+                    break;
+                case "ArduinoDate":
+                    if (InternetWorkerModule.SendToClinetRecive(Obj.Args[0], Obj.Args[1], out var res))
+                        this.SendPacket(res);
+                    else
+                        this.SendPacket("NULL");
+                    break;
+
+
+            }
+        }
+
+       
+
+
+    }
+
+    public static class Injection
+    {
+        private static Socket InjectConnection;
+        private static List<Device> Devices = new List<Device>();
+        private static DispatcherTimer KillTimer = new DispatcherTimer();
+
+        public static void CloseServer()
+        {
+            if (KillTimer == null) return;
+            KillTimer.Stop();
+            KillTimer = null;
+            if (InjectConnection != null)
+            {
+                InjectConnection.Dispose();
+                InjectConnection.Close();
+
+                InjectConnection = null;
+            }
+
+
+            var tmp = new List<Device>(Devices.ToArray());
+            foreach (var item in tmp)
+            {
+                item.CloseDevicesConnection();
+                Devices.Remove(item);
+            }
+        }
+
+        public static void AcceptCallbackDevices(IAsyncResult ar)
+        {
+            try
+            {
+                Socket handler = InjectConnection.EndAccept(ar);
+                Devices.Add(new Device(handler));
+                InjectConnection.BeginAccept(new AsyncCallback(AcceptCallbackDevices), null);
+
+
+            }
+            catch (Exception ex)
+            {
+                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+            }
+       
+
+        }
+
+        private static void CreateDefaultSocket()
+        {
+            IPAddress ipAddress = IPAddress.Parse(MainSettings.IpInject);
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, MainSettings.PortInject);
+            InjectConnection = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            InjectConnection.Bind(localEndPoint);
+            InjectConnection.Listen(0);
+            InjectConnection.BeginAccept(new AsyncCallback(AcceptCallbackDevices), null);
+          
+
+        }
+
+        private static void KillTimer_Tick(object sender, EventArgs e)
+        {
+            var tmp = new List<Device>(Devices.ToArray());
+            foreach (var item in tmp)
+            {
+                if (!item.isConnected())
+                {
+                    Logs.Log.Write(Logs.TypeLog.Message, $"InjectWorker session closed about [{item.SessionLogin}]");
+                    item.CloseDevicesConnection();
+                    Devices.Remove(item);
+                }
+            }
+        }
+
+        private static void InitializationKillerTime()
+        {
+            if (KillTimer == null) KillTimer = new DispatcherTimer();
+            KillTimer.Interval = MainSettings.CheckConnectServer;
+            KillTimer.Tick += KillTimer_Tick;
+            KillTimer.Start();
+        }
+
+        public static void StartServer()
+        {
+            try
+            {
+                CreateDefaultSocket();
+                InitializationKillerTime();
+                Logs.Log.Write(Logs.TypeLog.Message, $"Inject stared at {InjectConnection.LocalEndPoint}!");
                 Console.ReadLine();
             }
             catch (Exception e)
@@ -198,55 +325,8 @@ namespace MyAsistent.Module.Internet.CodeInject
                 Logs.Log.Write(Logs.TypeLog.Error, e.Message);
             }
         }
-        public static void OffInject()
-        {
-            if (KillTimer == null) return;
-            KillTimer.Stop();
-            KillTimer = null;
-           if(Inject != null)
-            {
-                Inject.Dispose();
-                Inject.Close();
 
-                Inject = null;
-            }
-           
 
-            var tmp = new List<ItemInjection>(InjectionsList.ToArray());
-            foreach (var item in tmp)
-            {
-                item.Close();
-                InjectionsList.Remove(item);
-            }
-        }
-        private static void KillTimer_Tick(object sender, EventArgs e)
-        {
-           var tmp = new List<ItemInjection>(InjectionsList.ToArray());
-           foreach(var item in tmp)
-            {
-                if (!item.SocketConnected())
-                {
-                    Logs.Log.Write(Logs.TypeLog.Message, $"InjectWorker session closed about [{item.LoginOfSession}]");
-                    item.Close();  
-                    InjectionsList.Remove(item);
-                }
-            } 
-        }
-
-        public static void AcceptCallbackUsers(IAsyncResult ar)
-        {
-            try
-            {
-                Socket handler = Inject.EndAccept(ar);
-                InjectionsList.Add(new ItemInjection(handler));
-                Inject.BeginAccept(new AsyncCallback(AcceptCallbackUsers), null);
-            }
-            catch (Exception ex )
-            {
-              Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
-            }
-           
-        }
 
     }
 }

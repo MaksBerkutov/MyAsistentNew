@@ -331,7 +331,7 @@ namespace MyAsistent.Module.Internet
                 return true;
         }
         public bool Connect => SocketConnected();
-        public async Task<string> OTAUpdate(string Path)
+        public  string OTAUpdate(string Path)
         {
 
             try

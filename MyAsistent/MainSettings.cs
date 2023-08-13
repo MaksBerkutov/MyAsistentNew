@@ -9,48 +9,51 @@ namespace MyAsistent
 {
     public class Account
     {
-        private static readonly string name = $"{MainSettings.path}\\Accounts.json";
+        private static readonly string NAME_TO_SAVE_FILE = $"{MainSettings.path}\\Accounts.json";
         public string Login { get; set; }
         public string Password { get; set; }
-        private bool work = false;
+        private bool isActive = false;
         [JsonIgnore]
-        public bool Connection => work;
-        public void OpenCoonnection() => work = true;
-        public void CloseCoonnection() => work = false;
+        public bool Connection => isActive;
+        public void OpenCoonnection() => isActive = true;
+        public void CloseCoonnection() => isActive = false;
         public static void CloseConnection(string Login)
         {
-            foreach (var account in accounts)
+            foreach (var account in Accounts)
                 if (account.Login.Equals(Login))
                 {
-                    account.work = false;return;
+                    account.isActive = false;
+                    return;
                 }
                     
         }
-        public static ObservableCollection<Account> accounts = new ObservableCollection<Account>();
-        public static void RemoveID(int id)=>accounts.RemoveAt(id);
+        public static ObservableCollection<Account> Accounts = new ObservableCollection<Account>();
+        public static void RemoveID(int id)=>Accounts.RemoveAt(id);
         public static void Load()
         {
-            accounts = File.Exists(name) ? JsonConvert.DeserializeObject<ObservableCollection<Account>>(File.ReadAllText(name)) : new ObservableCollection<Account>();
-            Console.WriteLine(accounts);
+            Accounts = File.Exists(NAME_TO_SAVE_FILE) ? JsonConvert.DeserializeObject<ObservableCollection<Account>>(File.ReadAllText(NAME_TO_SAVE_FILE)) : new ObservableCollection<Account>();
+            Console.WriteLine(Accounts);
         }
         public static void Save()
         {
-            if (!Directory.Exists(name)) Directory.CreateDirectory(name.Split('\\')[0]);
-            File.WriteAllText(name, JsonConvert.SerializeObject(accounts));
+            if (!Directory.Exists(NAME_TO_SAVE_FILE)) 
+                Directory.CreateDirectory(NAME_TO_SAVE_FILE.Split('\\')[0]);
+
+            File.WriteAllText(NAME_TO_SAVE_FILE, JsonConvert.SerializeObject(Accounts));
         }
         public static bool Add(string l, string p)
         {
-            foreach (var item in accounts)
+            foreach (var item in Accounts)
                 if (item.Login.Equals(l))
                     return false;
             App.Current.Dispatcher.Invoke(() =>
-                accounts.Add(new Account(l, p))
+                Accounts.Add(new Account(l, p))
             );
             return true;
         }
         public static Account FindUser(string l,string p)
         {
-            foreach (var item in accounts)
+            foreach (var item in Accounts)
                 if (item.Login == l && item.Password == p.GetHashCode().ToString())
                     return item;
             return null;
@@ -64,7 +67,7 @@ namespace MyAsistent
             Login = l;  
             Password = p.GetHashCode().ToString();
         }
-        public override string ToString() => $"{Login}: {work}";
+        public override string ToString() => $"{Login}: {isActive}";
     }
     public static class MainSettings
     {
@@ -74,15 +77,19 @@ namespace MyAsistent
         private static readonly string name = $"{path}\\Settings.json";
         public static readonly string PathToSaveScript = @$"Script";
 
-
+        //CheckAutoSave
         private static DispatcherTimer tm = new DispatcherTimer();
         public static string SpeechCulture = "ru-Ru";
         public static string VoiceCulture = "";
+        //SwitchVoiceLog
         public static bool VoiceLog = false;
+        //SwitchVoiceMessage
         public static bool VoiceMessage  = true;
 
         //========<Com>
+        //BaudRateComPort
         public static int BaudRate  = 9600;
+        //NameComPort
         public static string COMname = "COM5";
         //=======>
 
@@ -113,6 +120,7 @@ namespace MyAsistent
         //==========>
 
         //======<Telegram Module>
+        //StatusTelegramBot
         public static bool StatusTBot = false;
         public static string APIKey = "";
         public static ObservableCollection<long> WhiteListID = new ObservableCollection<long>()
