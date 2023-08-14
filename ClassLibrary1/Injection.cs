@@ -96,7 +96,6 @@ namespace InjectionAsistent
                 return Convert.ToBase64String(encryptedData);
             }
         }
-
         private string DecryptWithPrivateKey(string encryptedText)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
