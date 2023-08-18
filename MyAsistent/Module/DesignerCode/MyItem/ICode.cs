@@ -12,6 +12,8 @@ namespace MyAsistent.Module.DesignerCode.MyItem
         string GetCode();
         UserControl GetUserControl();
         ICode GetNewElement();
+        void Load(object[] arg);
+        object[] Save();
         event Delete OnDelete;
     }
     public delegate void Delete(ICode sender);

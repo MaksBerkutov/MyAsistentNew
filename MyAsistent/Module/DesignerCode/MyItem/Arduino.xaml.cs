@@ -20,8 +20,8 @@ namespace MyAsistent.Module.DesignerCode.MyItem
     /// </summary>
     public partial class Arduino : UserControl,ICode
     {
-        public string NamePlate { get ; set; }  
-        public string Command { get; set; } 
+        public string NamePlate { get; set; } = string.Empty; 
+        public string Command { get; set; } = string.Empty;
         public Arduino()
         {
             InitializeComponent();
@@ -42,10 +42,7 @@ namespace MyAsistent.Module.DesignerCode.MyItem
              NamePlate = txtName.Text;
              Command = txtSurname.Text;
 
-
-            txtName.Text = string.Empty;
-            txtSurname.Text = string.Empty;
-            myPopup.IsOpen = false;
+             myPopup.IsOpen = false;
         }
 
         public UserControl GetUserControl()
@@ -59,6 +56,17 @@ namespace MyAsistent.Module.DesignerCode.MyItem
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             OnDelete?.Invoke(this);
+        }
+
+        public void Load(object[] arg)
+        {
+            NamePlate = txtName.Text = arg[1].ToString();
+            Command = txtSurname.Text = arg[2].ToString();
+        }
+
+        public object[] Save()
+        {
+            return new object[] {typeof(Arduino), NamePlate, Command };
         }
     }
 }

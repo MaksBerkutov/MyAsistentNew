@@ -136,6 +136,24 @@ namespace MyAsistent.Module.DesignerCode
             return row;
 
         }
+        public void SetWindow(DesignerCode MainWindow) =>this.MainWindow = MainWindow;
+
+        public GridConroller(IEnumerable<object[]> LoadItems, DesignerCode MainWindow)
+        {
+            this.MainWindow = MainWindow;
+            items = new List<ControllerItem>();
+            foreach(var item in LoadItems)
+            {
+                var instance = Activator.CreateInstance(Type.GetType(item[0].ToString()));
+                if (instance is MyItem.ICode myInterfaceInstance)
+                {
+                    myInterfaceInstance.Load(item);
+                    this.Add(myInterfaceInstance);
+                }
+            }
+                
+
+        }
         public GridConroller(DesignerCode mainWindow)
         {
             this.MainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
@@ -156,6 +174,16 @@ namespace MyAsistent.Module.DesignerCode
             items.Add(controlItem);
 
 
+        }
+
+        public string GetSaveString()
+        {
+            var saveItems = items.Select(x => x.Item.Save());
+            return Newtonsoft.Json.JsonConvert.SerializeObject(saveItems);
+        }
+        public static IEnumerable<object[]> Load(string ReadString)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<object[]>>(ReadString);
         }
 
         private void Item_OnDelete(MyItem.ICode sender)
@@ -215,6 +243,15 @@ namespace MyAsistent.Module.DesignerCode
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var result = MainController.GetCode();
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            System.IO.File.WriteAllText("TestSave.json",MainController.GetSaveString());
+        }
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            this.MainController = new GridConroller(GridConroller.Load(System.IO.File.ReadAllText("TestSave.json")),this);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace MyAsistent.Module.DesignerCode.MyItem
     public partial class Vosie : UserControl,ICode
     {
         //Voise
-        public string Voise { get; set; }   
+        public string Voise { get; set; } = string.Empty;
         public Vosie()
         {
             InitializeComponent();
@@ -46,7 +46,7 @@ namespace MyAsistent.Module.DesignerCode.MyItem
         {
             Voise = txtVoise.Text;
 
-            txtVoise.Text = string.Empty;
+            
             myPopup.IsOpen = false;
         }
 
@@ -54,6 +54,16 @@ namespace MyAsistent.Module.DesignerCode.MyItem
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             OnDelete?.Invoke(this);
+        }
+
+        public void Load(object[] arg)
+        {
+            Voise = txtVoise.Text = arg[1].ToString();
+        }
+
+        public object[] Save()
+        {
+            return new object[] { typeof(Vosie), Voise };
         }
     }
 }
