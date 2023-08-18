@@ -310,7 +310,7 @@ namespace MyAsistent
             Windows.Code.CodePage.Init();
             InitializeComponent();
             mainFrame.Navigate(new Windows.Code.MainPageCode());
-            
+            mainFrame.Navigate(new Module.DesignerCode.DesignerCode());
 
         }
         
@@ -342,7 +342,7 @@ namespace MyAsistent
             
             
         }
-        
+
         private void TIDAdd_Click(object sender, RoutedEventArgs e)
         {
            if(long.TryParse(TIDAdd.Text, out var res))
@@ -514,7 +514,16 @@ namespace MyAsistent
             date = new MyData();
             DataContext = date;
 
+            //Slider
+            this.sliderSens.Value = MainSettings.Sensivity;
+            this.sliderSens.ValueChanged += SliderSens_ValueChanged;
 
+
+        }
+
+        private void SliderSens_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            MyAsistent.Module.Sound.Sound.Sensivity = sliderSens.Value;
         }
 
         private void Lang_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -599,7 +608,7 @@ namespace MyAsistent
                     }
                     catch (Exception ex)
                     {
-                        //Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                        Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
                     }
                 }));
                

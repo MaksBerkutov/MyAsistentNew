@@ -11,6 +11,7 @@
     <sys:String x:Key="MainSettings">Main Settings</sys:String>
     <sys:String x:Key="Network">Network</sys:String>
     <sys:String x:Key="Modul">Module</sys:String>
+    <sys:String x:Key="Sensivity">Sensivity</sys:String>
     <sys:String x:Key="LocalWebServer">Local Web Server</sys:String>
     <sys:String x:Key="Injection">Injection</sys:String>
     <sys:String x:Key="SettingsTelegram">Settings Telegarm</sys:String>

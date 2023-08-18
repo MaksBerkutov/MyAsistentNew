@@ -76,6 +76,7 @@ namespace MyAsistent
         public static readonly string path = "Saves";
         private static readonly string name = $"{path}\\Settings.json";
         public static readonly string PathToSaveScript = @$"Script";
+        public static double Sensivity = 0.5; 
 
         //CheckAutoSave
         private static DispatcherTimer tm = new DispatcherTimer();
@@ -145,6 +146,7 @@ namespace MyAsistent
             public  int PortInject = MainSettings.PortInject;
             public  bool StatusTBot = MainSettings.StatusTBot;
             public  string APIKey = MainSettings.APIKey;
+            public  double Sensivity = MainSettings.Sensivity;
             public ObservableCollection<long> WhiteListID = MainSettings.WhiteListID;
 
 
@@ -193,6 +195,7 @@ namespace MyAsistent
             Account.Load();
             var save = File.Exists(name) ? JsonConvert.DeserializeObject<Saves>(File.ReadAllText(name)) : new Saves();
             SpeechCulture = save.SpeechCulture;
+            Sensivity = save.Sensivity;
             VoiceCulture = save.VoiceCulture;
             VoiceLog = save.VoiceLog;
             VoiceMessage = save.VoiceMessage;

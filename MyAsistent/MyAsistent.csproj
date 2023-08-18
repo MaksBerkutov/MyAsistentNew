@@ -166,6 +166,16 @@
     <Compile Include="Module\CodeModul\Compiler\AsisstentCodeBase.cs" />
     <Compile Include="Module\CodeModul\Compiler\Compiler.cs" />
     <Compile Include="Module\CodeModul\Compiler\ErrorInfo.cs" />
+    <Compile Include="Module\DesignerCode\DesignerCode.xaml.cs">
+      <DependentUpon>DesignerCode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Module\DesignerCode\MyItem\Arduino.xaml.cs">
+      <DependentUpon>Arduino.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Module\DesignerCode\MyItem\ICode.cs" />
+    <Compile Include="Module\DesignerCode\MyItem\Vosie.xaml.cs">
+      <DependentUpon>Vosie.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Module\Internet\CodeInject\InjectWorker.cs" />
     <Compile Include="Module\Internet\Internet.cs" />
     <Compile Include="Module\Internet\TelegramBotModule\TelegramBot.cs" />
@@ -210,6 +220,18 @@
     <Compile Include="Windows\Page_Add_PathModule.xaml.cs">
       <DependentUpon>Page_Add_PathModule.xaml</DependentUpon>
     </Compile>
+    <Page Include="Module\DesignerCode\DesignerCode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Module\DesignerCode\MyItem\Arduino.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Module\DesignerCode\MyItem\Vosie.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Theme\DarkTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -321,6 +343,8 @@
     <Resource Include="Info.txt" />
     <Resource Include="Loadin.jpg" />
     <Resource Include="Logo_Red.ico" />
+    <Resource Include="Image\Arduino.png" />
+    <Resource Include="Image\Vosie.png" />
     <Content Include="Module\Internet\WebServer\Site\index.html" />
   </ItemGroup>
   <ItemGroup>

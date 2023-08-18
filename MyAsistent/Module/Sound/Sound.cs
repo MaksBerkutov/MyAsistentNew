@@ -48,7 +48,16 @@ namespace MyAsistent.Module.Sound
         private static GrammarBuilder gb;
         private static Grammar g;
         private static List<string> SaveS = new List<string>() { "1" };
-
+        public static double Sensivity { get => sensivity;set
+            {
+                if (value >= 0 && value <= 1.0)
+                {
+                    MainSettings.Sensivity = sensivity = value;
+                }
+                   
+            }
+        }
+        public static double sensivity = 0.5;
         private static bool Check_add_range_Lib(string lib) => (!(SaveS.FindIndex(p => p == lib) >= 0));
         public static void Change_Culture(string culture) { ci = new System.Globalization.CultureInfo(culture);}
         public static IReadOnlyCollection<RecognizerInfo> getAllCultures() => SpeechRecognitionEngine.InstalledRecognizers();
@@ -85,7 +94,7 @@ namespace MyAsistent.Module.Sound
 
             sre.SetInputToDefaultAudioDevice();
             sre.SpeechRecognized += (object sender, SpeechRecognizedEventArgs e) => {
-               if(e.Result.Confidence>=0.5) Codes.interpretatot.Run(e.Result.Text);
+               if(e.Result.Confidence>= sensivity) Codes.interpretatot.Run(e.Result.Text);
             };
             numbers.Add(SaveS.ToArray());
             gb.Culture = ci;

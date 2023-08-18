@@ -49,19 +49,20 @@
             </TabItem>
             <TabItem Header="{DynamicResource Script}">
                 <Grid>
-                    <Frame x:Name="mainFrame" />
+                    <Frame x:Name="mainFrame" Grid.Row="1"/>
                 </Grid>
-               
+
             </TabItem>
             <TabItem Header="{DynamicResource Settings}">
                 <TabControl>
                     <TabItem Header="{DynamicResource MainSettings}">
                         <Grid Background="Gray">
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition Height="88*"/>
+                                <RowDefinition Height="81*"/>
+                                <RowDefinition Height="112*"/>
+                                <RowDefinition Height="99*"/>
+                                <RowDefinition Height="30*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90*"/>
@@ -73,9 +74,18 @@
                             <CheckBox Name="Settings_VoiceLog" Margin="0,15,15,15" IsChecked="False" Grid.Row="2" Content="{DynamicResource VoiceLog}" Click="Settings_VoiceLog_Click" Grid.ColumnSpan="2"/>
                             <CheckBox Name="Settings_VoiceMessage" Margin="0,15,15,15" IsChecked="True" Grid.Row="3" Content="{DynamicResource VoiceMsg}" Click="Settings_VoiceMessage_Click" Grid.ColumnSpan="2"/>
                             <ListBox Name="listCultureText" Grid.Column="2" Grid.RowSpan="2" MouseDoubleClick="ListCultureText_MouseDoubleClick"/>
+                            <Grid Grid.Row="4" Grid.ColumnSpan="3" VerticalAlignment="Center" Height="18">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="199*"/>
+                                    <ColumnDefinition Width="500*"/>
+                                    <ColumnDefinition Width="89*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{DynamicResource Sensivity}" />
+                                <Slider Name="sliderSens" Grid.Column="1"   Minimum="0" Maximum="1" />
+                                <TextBlock Grid.Column="2"  Text="{Binding ElementName=sliderSens, Path=Value, StringFormat=F1}"/>
+                            </Grid>
 
-
-                            <Grid Grid.Row="1" Grid.Column="2" Margin="0,94,0,94" Grid.RowSpan="3">
+                            <Grid Grid.Row="2" Grid.Column="2" Margin="0,12,0,8">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="66*"/>
                                     <RowDefinition Height="29*"/>
@@ -83,7 +93,7 @@
                                 <tp:TimePicker  x:Name="SaveTime" ChangeTimePickerHandler="ChangeTimePicker_SaveTime" />
                                 <TextBlock Text="{DynamicResource TimeAutoSave}" FontSize="20" TextAlignment="Center" Grid.Row="1"/>
                             </Grid>
-                            <Grid Grid.Row="3" Grid.Column="2">
+                            <Grid Grid.Row="3" Grid.Column="2" Margin="0,2,0,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="66*"/>
                                     <RowDefinition Height="29*"/>
@@ -164,7 +174,7 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                         <RowDefinition/>
-                                        
+
                                     </Grid.RowDefinitions>
 
                                     <Button Click="OpenFierware_Click" Content="{DynamicResource OpenFierware}" Margin="5 5 5 5"/>
@@ -174,14 +184,14 @@
                                 </Grid>
                             </GroupBox>
 
-                                <GroupBox Header="{DynamicResource ConnectModule}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
+                            <GroupBox Header="{DynamicResource ConnectModule}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="216*"/>
                                         <RowDefinition Height="139*"/>
                                     </Grid.RowDefinitions>
                                     <ListBox Name="ArduinoSocketUsersListBox">
-                                           
+
                                     </ListBox>
                                     <Grid Grid.Row="2">
                                         <Grid.RowDefinitions>

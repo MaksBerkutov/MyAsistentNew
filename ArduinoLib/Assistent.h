@@ -4,18 +4,25 @@
 #include <WiFiClient.h>
 #include<string.h>
 class AssistentVariable{
+
     String obj;
+
     public:
-    AssistentVariable(String* NameVar,String* Date,int size){
-        obj="";
-        for(int i = 0;i<size;i++){
-            if(i==0) obj+="["+NameVar[i]+"]:"+Date[i];
-            else obj+="_["+NameVar[i]+"]:"+Date[i];
-        }Serial.println(obj);
-    }
-    String GetStringVal(){
-       return obj;
-    }
+        AssistentVariable(String* NameVar,String* Date,int size){
+            obj="";
+
+            for(int i = 0;i<size;i++){
+                if (i == 0)
+                    obj += "[" + NameVar[i] + "]:" + Date[i];
+                else
+                    obj += "_[" + NameVar[i] + "]:" + Date[i];
+            }
+            Serial.println(obj);
+        }
+
+        String GetStringVal(){
+           return obj;
+        }
  
     
 

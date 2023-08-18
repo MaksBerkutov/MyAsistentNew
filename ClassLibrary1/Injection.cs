@@ -105,6 +105,7 @@ namespace InjectionAsistent
                 byte[] decryptedData = rsa.Decrypt(encryptedData, false);
                 return Encoding.UTF8.GetString(decryptedData);
             }
+
         }
 
         private string GenerateKeys()
@@ -142,7 +143,9 @@ namespace InjectionAsistent
                     byte[] messageReceived = new byte[Connection.Available];
                     Connection.Receive(messageReceived);
                     var readString = Encoding.UTF8.GetString(messageReceived);
-                    return PacketDevice.ConvertFromString(readString);
+                    var convertObject = PacketDevice.ConvertFromString(readString);
+                    this.PublicKey = convertObject.PublicKey;
+                    return convertObject;
 
                 }
         }
@@ -163,7 +166,7 @@ namespace InjectionAsistent
 
             Connection = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             Connection.Connect(localEndPoint);
-            PublicKey = ReadDate().PublicKey ;
+            ReadDate();
         }
         private void Auntification()
         {

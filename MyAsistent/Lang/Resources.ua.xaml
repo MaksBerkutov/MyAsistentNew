@@ -12,6 +12,7 @@
     <sys:String x:Key="MainSettings">Голвні налаштування</sys:String>
     <sys:String x:Key="Network">Мережа</sys:String>
     <sys:String x:Key="Modul">Модулі</sys:String>
+    <sys:String x:Key="Sensivity">Чутливість</sys:String>
     <sys:String x:Key="LocalWebServer">Локальний вебсервер</sys:String>
     <sys:String x:Key="Injection">Ін'єкції</sys:String>
     <sys:String x:Key="SettingsTelegram">Налаштування Telegarm</sys:String>

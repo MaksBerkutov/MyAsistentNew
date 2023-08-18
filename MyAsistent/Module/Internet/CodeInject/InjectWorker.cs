@@ -62,15 +62,7 @@ namespace MyAsistent.Module.Internet.CodeInject
         private const int BUFFER_SIZE = 2048;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
-        private string GenerateKeys()
-        {
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
-            {
-
-                PrivateKey = rsa.ToXmlString(true);
-                return rsa.ToXmlString(false);
-            }
-        }
+        
 
         private bool CheckConnected()
         {
@@ -146,6 +138,15 @@ namespace MyAsistent.Module.Internet.CodeInject
             
         }
 
+        private string GenerateKeys()
+        {
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+            {
+
+                PrivateKey = rsa.ToXmlString(true);
+                return rsa.ToXmlString(false);
+            }
+        }
         private string EncryptWithPublicKey(string plainText)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
@@ -156,7 +157,6 @@ namespace MyAsistent.Module.Internet.CodeInject
                 return Convert.ToBase64String(encryptedData);
             }
         }
-
         private string DecryptWithPrivateKey(string encryptedText)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
@@ -170,11 +170,14 @@ namespace MyAsistent.Module.Internet.CodeInject
 
         private void ConvertDatePackets(PacketDevice InputPacket)
         {
+            if (InputPacket != null && InputPacket.PublicKey.Any())
+                this.PublicKey = InputPacket.PublicKey;
+            else return;
             if (InputPacket.Date.Any())
             {
-                this.PublicKey = InputPacket.PublicKey;
-                ObjectDevice DecryptDate = new ObjectDevice(Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(DecryptWithPrivateKey(InputPacket.Date)));
-                HandlerCommand(DecryptDate);
+                var decryptedData = DecryptWithPrivateKey(InputPacket.Date);
+                ObjectDevice deserelizeData = new ObjectDevice(Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(decryptedData));
+                HandlerCommand(deserelizeData);
             }
 
         }
@@ -191,7 +194,6 @@ namespace MyAsistent.Module.Internet.CodeInject
             SessionLogin = Arg.Login;
             this.SendPacket(Arg.Login);
         }
-
         private void Authentication(List<string> Arg)
         {
             if(Arg.Count == 2)

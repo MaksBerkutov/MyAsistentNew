@@ -15,8 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InjectionAssistent.h">
+    <ClCompile Include="Injection.h">
       <Filter>Файлы заголовков</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
 </Project>
