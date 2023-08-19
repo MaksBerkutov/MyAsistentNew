@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{44D5E148-3429-4610-9A34-A8B40CD0BF36}</ProjectGuid>
+    <ProjectGuid>{22C90558-E566-43E4-BF14-2AA7F2B32A43}</ProjectGuid>
     <TemplateGuid>{98C37F10-6541-44BE-B1E6-7EB3EB8C08F1}</TemplateGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -12,7 +12,7 @@
     <AssemblyName>UniversalConnector.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
@@ -97,6 +97,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReleseInterface\PushNotificationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -147,13 +148,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
+      <Version>7.1.3</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12"/>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UniversalConnector\UniversalConnector.csproj">
-      <Project>{2FC26B79-CC80-449C-9064-B311BC2D1D95}</Project>
+      <Project>{37902077-665D-4762-A4ED-3DD0D59AA65E}</Project>
       <Name>UniversalConnector</Name>
     </ProjectReference>
   </ItemGroup>
