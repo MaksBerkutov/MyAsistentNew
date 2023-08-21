@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using MyAsistent.Module.Internet.CodeInject;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,6 +34,9 @@ namespace MyAsistent
     }
     public class MyData : INotifyPropertyChanged
     {
+        private MyAsistent.Module.Internet.CodeInject.InjectionServer InjectionServer;
+        private MyAsistent.Module.Internet.UniversalConnetion.UniversalConnectorServer UniversalServer;
+
         private int bhaud;
         private int port;
         private int alis;//AddresListIDServer
@@ -69,7 +73,9 @@ namespace MyAsistent
             }
             
         }
-        public MyData() { 
+        public MyData() {
+            InjectionServer = new InjectionServer();
+            UniversalServer = new Module.Internet.UniversalConnetion.UniversalConnectorServer();
             loadIps();
             Bhaud = MainSettings.BaudRate; OnPropertyChanged("Bhaud");
             Alis = MainSettings.AddresListIDServer; OnPropertyChanged("Alis");
@@ -152,8 +158,8 @@ namespace MyAsistent
             {
                 acceptInject = value;
                 MainSettings.StatusInject = value;
-                if (value) Module.Internet.CodeInject.Injection.StartServer();
-                else Module.Internet.CodeInject.Injection.CloseServer();
+                if (value) InjectionServer.StartServer();
+                else InjectionServer.CloseServer();
             }
         }
         public bool StatusTBot

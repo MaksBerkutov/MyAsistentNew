@@ -178,7 +178,9 @@
     </Compile>
     <Compile Include="Module\Internet\CodeInject\InjectWorker.cs" />
     <Compile Include="Module\Internet\Internet.cs" />
+    <Compile Include="Module\Internet\Model\MainServer.cs" />
     <Compile Include="Module\Internet\TelegramBotModule\TelegramBot.cs" />
+    <Compile Include="Module\Internet\UniversalConnector.cs" />
     <Compile Include="Module\Internet\WebServer\WebServerManager.cs" />
     <Compile Include="Module\MessageBoxes\GetString.xaml.cs">
       <DependentUpon>GetString.xaml</DependentUpon>

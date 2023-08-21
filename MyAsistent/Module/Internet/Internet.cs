@@ -191,7 +191,7 @@ namespace MyAsistent.Module.Internet
           {command[0],"Получение краткой информации об устройстве которое пытаеться установить соедение с сервером.\n" +
               "Ситаксис ответа: \"NamePlate.DiscriptionPlate\"" },
           {command[1],"Получение информации о устройстве которое пытаеться установить подключение\n" +
-              "Это нужно для того что бы сервер понимал какеи метод применять." }
+              "Это нужно для того что бы сервер понимал какие метод применять." }
       };
    }
     public interface IInternetClient
@@ -429,53 +429,7 @@ namespace MyAsistent.Module.Internet
         public string SendAndRecive(string msg) => null;
         string Read() => null;
     }
-    public class UniversalClient : InternetClient, IInternetClient
-    {
-
-
-        private string ip;
-        public string Ip => ip;
-
-        private Socket socket;
-        public Socket Sockets => socket;
-
-        private string name;
-        public string Name => name;
-
-        public bool Connect => false;
-        bool OffTherads = true;
-        public bool UnCorrectPlate => !OffTherads;
-
-        public UniversalClient(Socket socket) : base(socket)
-        {
-            try
-            {
-                this.socket = socket ?? throw new ArgumentNullException(nameof(socket));
-                ip = socket.RemoteEndPoint.ToString();
-            }
-            catch (Exception ex)
-            {
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
-            }
-        }
-        public void Send(string msg) => socket.Send(Encoding.ASCII.GetBytes(msg));
-        public string SendAndRecive(string msg)
-        {
-            socket.Send(Encoding.ASCII.GetBytes(msg));
-            return Read();
-        }
-        string Read()
-        {
-            while (OffTherads)
-                while (socket.Available > 0)
-                {
-                    var ByteArrayeForRead = new Byte[socket.Available];
-                    socket.Receive(ByteArrayeForRead, ByteArrayeForRead.Length, SocketFlags.None);
-                    return Encoding.ASCII.GetString(ByteArrayeForRead);
-                }
-            return null;
-        }
-    }
+   
 
 
     public class InternetWorkerModule
@@ -504,11 +458,9 @@ namespace MyAsistent.Module.Internet
 
             public static ObservableCollection<ArduinoClient> ArduinoClients = new ObservableCollection<ArduinoClient>();
             public static ObservableCollection<PCClient> PCClients = new ObservableCollection<PCClient>();
-            public static ObservableCollection<UniversalClient> UCClients = new ObservableCollection<UniversalClient>();
             public static List<IInternetClient> ALLDevice{ get {
                     var ret = new List<IInternetClient>(ArduinoClients);
                     ret.AddRange(PCClients);
-                    ret.AddRange(UCClients);
                     return ret;
                 } 
             }
@@ -531,10 +483,7 @@ namespace MyAsistent.Module.Internet
                         {
                             PCClients.Remove((PCClient)value);
                         }
-                        else if (UCClients.ToList().Find(x => x == value) != null)
-                        {
-                            UCClients.Remove((UniversalClient)value);
-                        }
+                       
 
 
 

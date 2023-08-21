@@ -13,6 +13,7 @@ namespace UniversalConnector.ViewModels
             Title = "About";
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://aka.ms/xamarin-quickstart"));
             CreateNotify = new Command( () => DependencyService.Get<IPushNotificationService>().HandleNotification($"Tested Message date time {DateTime.Now.ToLocalTime()}"));
+
         }
 
         public ICommand OpenWebCommand { get; }
