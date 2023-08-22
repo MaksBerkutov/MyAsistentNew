@@ -158,8 +158,16 @@ namespace MyAsistent
             {
                 acceptInject = value;
                 MainSettings.StatusInject = value;
-                if (value) InjectionServer.StartServer();
-                else InjectionServer.CloseServer();
+                if (value)
+                {
+                    InjectionServer.StartServer();
+                    UniversalServer.StartServer();
+
+                }
+                else { 
+                    InjectionServer.CloseServer();
+                    UniversalServer.CloseServer();
+                }
             }
         }
         public bool StatusTBot

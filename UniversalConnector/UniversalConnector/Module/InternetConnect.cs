@@ -1,37 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using System.Net;
-using System.Globalization;
 
-namespace MyAsistent.Module.Internet.Model
+namespace UniversalConnector.Module
 {
-    public interface IDevices
-    {
-        Socket Connection { get; }
-        bool isConected { get; }
-
-        public void CloseDevicesConnection();
-        public void Start(Socket socket);
-
-    }
-    public interface IServer<T> where T : IDevices
-    {
-        Socket Connetions { get; }
-        List<T> Devices { get; }
-        public void CloseServer();
-        public void StartServer();
-
-    }
-
     public class PacketDevice
     {
         public string PublicKey { get; set; }
@@ -104,11 +81,11 @@ namespace MyAsistent.Module.Internet.Model
             }
         }
     }
-    public abstract class Devices : IDevices
+    public class InternetConnect
     {
-        public Socket Connection { get; protected set; }
-        protected string PublicKey;
-        protected string PrivateKey;
+        public Socket Connection { get; private set; }
+        private string PublicKey;
+        private string PrivateKey;
         public bool isConected
         {
             get
@@ -133,14 +110,20 @@ namespace MyAsistent.Module.Internet.Model
             else
                 return true;
         }
-        public Devices()
+        public InternetConnect(string Ip,int Port)
         {
+            IPAddress ipAddr = IPAddress.Parse(Ip);
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddr, Port);
+
+            Connection = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            Connection.Connect(localEndPoint);
+            this.Connection.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, this.Connection);
         }
 
         private const int BUFFER_SIZE = 2048;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
-        protected virtual void SendPacket(string Date)
+        private void SendPacket(string Date)
         {
             Date = Date == string.Empty ? string.Empty : RSAextentions.EncryptWithPublicKey(Date, PublicKey);
             Connection.Send(Encoding.UTF8.GetBytes(
@@ -148,20 +131,12 @@ namespace MyAsistent.Module.Internet.Model
              .ToString()));
         }
 
-        public virtual void Start(Socket socket)
-        {
-            this.Connection = socket;
-
-            this.Connection.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, this.Connection);
-
-            this.SendPacket(string.Empty);
-        }
-        public virtual void CloseDevicesConnection()
+        public void CloseDevicesConnection()
         {
             Connection.Dispose();
         }
 
-        protected void ConvertDatePackets(PacketDevice InputPacket)
+        private void ConvertDatePackets(PacketDevice InputPacket)
         {
             if (InputPacket != null && InputPacket.PublicKey.Any())
                 this.PublicKey = InputPacket.PublicKey;
@@ -175,7 +150,7 @@ namespace MyAsistent.Module.Internet.Model
 
         }
 
-        protected virtual PacketDevice Recive(IAsyncResult AR)
+        private PacketDevice Recive(IAsyncResult AR)
         {
             Socket current = (Socket)AR.AsyncState;
             int received = current.EndReceive(AR);
@@ -185,7 +160,7 @@ namespace MyAsistent.Module.Internet.Model
             return PacketDevice.ConvertFromString(readString);
         }
 
-        protected virtual void ReceiveCallback(IAsyncResult AR)
+        private void ReceiveCallback(IAsyncResult AR)
         {
             try
             {
@@ -196,115 +171,13 @@ namespace MyAsistent.Module.Internet.Model
             }
             catch (SocketException ex)
             {
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
                 Connection.Close();
             }
 
         }
-        protected abstract void HandlerCommand(ObjectDevice Obj);
-
-    }
-    public abstract class Server<T> where T : Devices, new()
-    {
-        protected string Ip = string.Empty;
-        protected int Port = -1;
-
-        private Socket Connetion;
-        public Socket Connetions => Connetion;
-        public List<T> Devices = new List<T>();
-        private DispatcherTimer KillTimer = new DispatcherTimer();
-
-        public virtual void CloseServer()
+        private void HandlerCommand(ObjectDevice Obj)
         {
-            if (KillTimer == null) return;
-            KillTimer.Stop();
-            KillTimer = null;
-            if (Connetion != null)
-            {
-                Connetion.Dispose();
-                Connetion.Close();
 
-                Connetion = null;
-            }
-
-
-            var tmp = new List<T>(Devices.ToArray());
-            foreach (var item in tmp)
-            {
-                item.CloseDevicesConnection();
-                Devices.Remove(item);
-            }
-        }
-
-        public virtual void AcceptCallbackDevices(IAsyncResult ar)
-        {
-            try
-            {
-                Socket handler = Connetion.EndAccept(ar);
-                Devices.Add(new T());
-                Devices.LastOrDefault().Start(handler);
-                Connetion.BeginAccept(new AsyncCallback(AcceptCallbackDevices), null);
-
-
-            }
-            catch (Exception ex)
-            {
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
-            }
-
-
-        }
-
-        private void CreateDefaultSocket()
-        {
-            IPAddress ipAddress = IPAddress.Parse(Ip);
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, Port);
-            Connetion = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            Connetion.Bind(localEndPoint);
-            Connetion.Listen(0);
-            Connetion.BeginAccept(new AsyncCallback(AcceptCallbackDevices), null);
-
-
-        }
-
-        protected virtual string MessageDisconected(T item) => $"Devices session closed about [{item.Connection.LocalEndPoint.ToString()}]";
-        private void KillTimer_Tick(object sender, EventArgs e)
-        {
-            var tmp = new List<T>(Devices.ToArray());
-            foreach (var item in tmp)
-            {
-                if (!item.isConected)
-                {
-                    Logs.Log.Write(Logs.TypeLog.Message, MessageDisconected(item));
-                    item.CloseDevicesConnection();
-                    Devices.Remove(item);
-                }
-            }
-        }
-
-        private void InitializationKillerTime()
-        {
-            if (KillTimer == null) KillTimer = new DispatcherTimer();
-            KillTimer.Interval = MainSettings.CheckConnectServer;
-            KillTimer.Tick += KillTimer_Tick;
-            KillTimer.Start();
-        }
-
-        protected abstract string MessageStart();
-
-        public void StartServer()
-        {
-            try
-            {
-                CreateDefaultSocket();
-                InitializationKillerTime();
-                Logs.Log.Write(Logs.TypeLog.Message, MessageStart()) ;
-                Console.ReadLine();
-            }
-            catch (Exception e)
-            {
-                Logs.Log.Write(Logs.TypeLog.Error, e.Message);
-            }
         }
 
     }

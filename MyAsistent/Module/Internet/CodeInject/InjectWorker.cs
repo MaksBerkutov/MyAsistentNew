@@ -82,6 +82,7 @@ namespace MyAsistent.Module.Internet.CodeInject
             this.Ip = MainSettings.IpInject;
             this.Port = MainSettings.PortInject;
         }
+        protected override string MessageStart() => $"Inject stared at {Connetions.LocalEndPoint}!";
         protected override string MessageDisconected(InjectionDevice item) => $"InjectWorker session closed about [{item.SessionLogin}]";
 
     }

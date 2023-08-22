@@ -28,6 +28,8 @@ namespace MyAsistent.Module.Internet.UniversalConnetion
             this.Ip = MainSettings.IpInject;
             this.Port = 456;
         }
+        protected override string MessageStart() => $"Universal Connector Server stared at {Connetions.LocalEndPoint}!";
+
 
 
     }
