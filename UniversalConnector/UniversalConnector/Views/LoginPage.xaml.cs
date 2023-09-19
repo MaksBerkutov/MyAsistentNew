@@ -16,7 +16,6 @@ namespace UniversalConnector.Views
         {
             InitializeComponent();
             this.BindingContext = new LoginViewModel();
-            
         }
     }
 }
