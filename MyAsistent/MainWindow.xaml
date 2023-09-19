@@ -49,7 +49,15 @@
             </TabItem>
             <TabItem Header="{DynamicResource Script}">
                 <Grid>
-                    <Frame x:Name="mainFrame" Grid.Row="1"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="383*"/>
+                        <RowDefinition Height="39*"/>
+                    </Grid.RowDefinitions>
+                    <Frame x:Name="mainFrame" NavigationUIVisibility="Hidden"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" >
+                        <Button Content="Go Constructor" Click="GoConstructor_Click" Margin="5"/>
+                        <Button Content="Go Script" Click="GoScript_Click" Margin="5"/>
+                    </StackPanel>
                 </Grid>
 
             </TabItem>

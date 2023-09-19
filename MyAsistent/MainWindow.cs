@@ -309,11 +309,10 @@ namespace MyAsistent
         {
             Windows.Code.CodePage.Init();
             InitializeComponent();
-            mainFrame.Navigate(new Windows.Code.MainPageCode());
-            mainFrame.Navigate(new Module.DesignerCode.DesignerCode());
+
 
         }
-        
+
         private string fierwarePath = string.Empty;
         private void OpenFierware_Click(object sender, RoutedEventArgs e)
         {
@@ -359,6 +358,18 @@ namespace MyAsistent
         {
             if (InjectItems.SelectedIndex >= 0) Account.RemoveID(InjectItems.SelectedIndex);
 
+        }
+
+        private void GoConstructor_Click(object sender, RoutedEventArgs e)
+        {
+            while (mainFrame.NavigationService.RemoveBackEntry() != null) ;
+            mainFrame.Navigate(new Module.DesignerCode.DesignerCode());
+
+        }
+        private void GoScript_Click(object sender, RoutedEventArgs e)
+        {
+            while (mainFrame.NavigationService.RemoveBackEntry() != null) ;
+            mainFrame.Navigate(new Windows.Code.MainPageCode());
         }
         public static Dictionary<string, Codes.MenuArgumentItem> menu = new Dictionary<string, Codes.MenuArgumentItem>()
         {
