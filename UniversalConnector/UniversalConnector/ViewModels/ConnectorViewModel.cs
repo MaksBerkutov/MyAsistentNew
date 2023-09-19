@@ -8,7 +8,7 @@ namespace UniversalConnector.ViewModels
 {
     class ConnectorViewModel:BaseViewModel
     {
-        private string ip = "127.0.0.1";
+        private string ip = "192.168.1.200";
         private int port = 456;
         private Module.InternetConnect internetConnect;
         public ICommand OpenSocketCommand { get; }

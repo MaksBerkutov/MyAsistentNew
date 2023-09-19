@@ -16,13 +16,13 @@ namespace UniversalConnector.Droid
             intent.AddFlags(ActivityFlags.ClearTop);
             intent.PutExtra("message", message);
 
-            PendingIntent pendingIntent = PendingIntent.GetActivity(Application.Context, 0, intent, PendingIntentFlags.OneShot);
+            PendingIntent pendingIntent = PendingIntent.GetActivity(Application.Context, 0, intent, PendingIntentFlags.OneShot | PendingIntentFlags.Immutable);
 
-            var notificationBuilder = new NotificationCompat.Builder(Application.Context, "channel_id")
+            var notificationBuilder = new NotificationCompat.Builder(Application.Context, "channel_1")
                 .SetSmallIcon(Resource.Drawable.icon_feed)
                 .SetContentTitle("Push Notification")
                 .SetContentText(message)
-                .SetAutoCancel(true)
+                .SetAutoCancel(false)
                 .SetContentIntent(pendingIntent);
 
             var notificationManager = NotificationManagerCompat.From(Application.Context);

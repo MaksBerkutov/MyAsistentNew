@@ -13,7 +13,10 @@ namespace MyAsistent.Module.Internet.UniversalConnetion
 {
     class UniversalConnectorDevice:Model.Devices
     {
-
+        public void SendMessage(string message)
+        {
+            this.SendPacket(Newtonsoft.Json.JsonConvert.SerializeObject(new string[] {"msgbox", message }));
+        }
         
         protected override void HandlerCommand(Model.ObjectDevice DeserelizeData) { 
         

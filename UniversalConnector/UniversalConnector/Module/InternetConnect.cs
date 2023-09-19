@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RSACryptoServiceProviderExtensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -6,6 +7,68 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using UniversalConnector.Interface;
+using Xamarin.Forms;
+
+namespace RSACryptoServiceProviderExtensions
+{
+    public static class RSACryptoServiceProviderExtensions
+    {
+        public static void FromXmlStringTest(this RSACryptoServiceProvider rsa, string xmlString)
+        {
+            RSAParameters parameters = new RSAParameters();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlString);
+
+            if (xmlDoc.DocumentElement.Name.Equals("RSAKeyValue"))
+            {
+                foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes)
+                {
+                    switch (node.Name)
+                    {
+                        case "Modulus": parameters.Modulus = Convert.FromBase64String(node.InnerText); break;
+                        case "Exponent": parameters.Exponent = Convert.FromBase64String(node.InnerText); break;
+                        case "P": parameters.P = Convert.FromBase64String(node.InnerText); break;
+                        case "Q": parameters.Q = Convert.FromBase64String(node.InnerText); break;
+                        case "DP": parameters.DP = Convert.FromBase64String(node.InnerText); break;
+                        case "DQ": parameters.DQ = Convert.FromBase64String(node.InnerText); break;
+                        case "InverseQ": parameters.InverseQ = Convert.FromBase64String(node.InnerText); break;
+                        case "D": parameters.D = Convert.FromBase64String(node.InnerText); break;
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Invalid XML RSA key.");
+            }
+
+            rsa.ImportParameters(parameters);
+        }
+
+        public static string ToXmlStringTest(this RSACryptoServiceProvider rsa, RSAParameters parameters)
+        {
+            if(parameters.DP == null)
+            {
+                return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent></RSAKeyValue>",
+              Convert.ToBase64String(parameters.Modulus),
+              Convert.ToBase64String(parameters.Exponent));
+              
+            }
+            return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent><P>{2}</P><Q>{3}</Q><DP>{4}</DP><DQ>{5}</DQ><InverseQ>{6}</InverseQ><D>{7}</D></RSAKeyValue>",
+                Convert.ToBase64String(parameters.Modulus),
+                Convert.ToBase64String(parameters.Exponent),
+                Convert.ToBase64String(parameters.P),
+                Convert.ToBase64String(parameters.Q),
+                Convert.ToBase64String(parameters.DP),
+                Convert.ToBase64String(parameters.DQ),
+                Convert.ToBase64String(parameters.InverseQ),
+                Convert.ToBase64String(parameters.D));
+        }
+    }
+}
+
 
 namespace UniversalConnector.Module
 {
@@ -56,8 +119,8 @@ namespace UniversalConnector.Module
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
 
-                PrivateKey = rsa.ToXmlString(true);
-                return rsa.ToXmlString(false);
+                PrivateKey = rsa.ToXmlStringTest(rsa.ExportParameters(true));
+                return rsa.ToXmlStringTest(rsa.ExportParameters(false));
             }
         }
         public static string EncryptWithPublicKey(string plainText, string PublicKey)
@@ -74,7 +137,7 @@ namespace UniversalConnector.Module
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
-                rsa.FromXmlString(PrivateKey);
+                rsa.FromXmlStringTest(PrivateKey);
                 byte[] encryptedData = Convert.FromBase64String(encryptedText);
                 byte[] decryptedData = rsa.Decrypt(encryptedData, false);
                 return Encoding.UTF8.GetString(decryptedData);
@@ -138,8 +201,12 @@ namespace UniversalConnector.Module
 
         private void ConvertDatePackets(PacketDevice InputPacket)
         {
+
             if (InputPacket != null && InputPacket.PublicKey.Any())
+            {
                 this.PublicKey = InputPacket.PublicKey;
+                if(InputPacket.Date.Length == 0) this.SendPacket(string.Empty);
+            }
             else return;
             if (InputPacket.Date.Any())
             {
@@ -177,6 +244,14 @@ namespace UniversalConnector.Module
         }
         private void HandlerCommand(ObjectDevice Obj)
         {
+            switch (Obj.Command) {
+                case "msgbox": 
+                    {
+                        DependencyService.Get<IPushNotificationService>().HandleNotification($"{Obj.Args?[0]}");
+                        break;
+                    }
+            
+            }
 
         }
 

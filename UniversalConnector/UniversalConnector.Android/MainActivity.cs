@@ -32,7 +32,7 @@ namespace UniversalConnector.Droid
                 {
                     Description = GetString(Resource.String.notification_channel_description)
                 };
-
+            
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 notificationManager.CreateNotificationChannel(channel);
             }
