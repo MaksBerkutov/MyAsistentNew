@@ -163,7 +163,7 @@ namespace UniversalConnector.Module
                 }
             }
         }
-
+        public delegate void InputCommand(object Date);
         private bool CheckConnected()
         {
             bool part1 = Connection.Poll(1000, SelectMode.SelectRead);
@@ -250,8 +250,21 @@ namespace UniversalConnector.Module
                         DependencyService.Get<IPushNotificationService>().HandleNotification($"{Obj.Args?[0]}");
                         break;
                     }
+                case "aunt":
+                    {
+                        LoginCommandOutput(bool.Parse(Obj.Args?[0]));
+                        break;
+                    }
             
             }
+
+        }
+
+
+        //Send Function
+        public static event InputCommand LoginCommandOutput;
+        public void SendLoginCommand(string Login, string Password)
+        {
 
         }
 

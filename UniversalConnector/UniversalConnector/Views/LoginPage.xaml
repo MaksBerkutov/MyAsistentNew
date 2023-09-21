@@ -7,8 +7,15 @@
              x:Class="UniversalConnector.Views.LoginPage"
              Shell.NavBarIsVisible="False">
     <ContentPage.Content>
-        <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-            <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+        
+        <StackLayout Padding="10,0,10,0" VerticalOptions="Center" >
+            <Entry Placeholder="Логин" Text="{Binding Login, Mode=TwoWay}" />
+            <Entry Placeholder="Пароль" IsPassword="True" Text="{Binding Password, Mode=TwoWay}"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Button VerticalOptions="Center" Text="Войти" Command="{Binding LoginCommand}"/>
+                <Button VerticalOptions="Center" Text="Зарегистрироваться" Command="{Binding RegisterCommand}"/>
+
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
