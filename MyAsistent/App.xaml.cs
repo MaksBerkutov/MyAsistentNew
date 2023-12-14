@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyAssistentDLL;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -25,7 +26,7 @@ namespace MyAsistent
 
                 // Установка начального языка
                 LanguageManager.SelectedLanguage = "ua"; // Здесь указывайте код выбранного языка
-
+                ControllerAssistent.InilizeAssistent();
                 var item = new MainWindow();
                 item.InilizationApp();
                 item.Show();

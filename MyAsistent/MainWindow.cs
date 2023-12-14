@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,8 +12,12 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
+
+using MyAssistentDLL;
+using MyAssistentDLL.Logs;
+using MyAssistentDLL.Module.Internet;
+
 
 namespace MyAsistent
 {
@@ -31,7 +33,7 @@ namespace MyAsistent
             list.RemoveAll(x => !hashset.Add(x));
         }
     }
-    public class MyData : INotifyPropertyChanged
+    public class MainWindow_ViewModel : INotifyPropertyChanged
     {
         private int bhaud;
         private int port;
@@ -65,11 +67,11 @@ namespace MyAsistent
             catch (Exception ex)
             {
                 allIpAdrres.Clear();
-                Logs.Log.Write(Logs.TypeLog.Error,ex.Message);
+                Log.Write(TypeLog.Error,ex.Message);
             }
             
         }
-        public MyData() { 
+        public MainWindow_ViewModel() { 
             loadIps();
             Bhaud = MainSettings.BaudRate; OnPropertyChanged("Bhaud");
             Alis = MainSettings.AddresListIDServer; OnPropertyChanged("Alis");
@@ -125,7 +127,7 @@ namespace MyAsistent
             }
             catch (Exception ex)
             {
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                Log.Write(TypeLog.Error, ex.Message);
             }
           
         }
@@ -140,7 +142,7 @@ namespace MyAsistent
             }
             catch (Exception ex)
             {
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                Log.Write(TypeLog.Error, ex.Message);
             }
 
         }
@@ -152,8 +154,8 @@ namespace MyAsistent
             {
                 acceptInject = value;
                 MainSettings.StatusInject = value;
-                if (value) Module.Internet.CodeInject.Injection.StartServer();
-                else Module.Internet.CodeInject.Injection.CloseServer();
+                if (value) ControllerAssistent.StartInjectionServer();
+                else ControllerAssistent.StopInjectionServer();
             }
         }
         public bool StatusTBot
@@ -163,8 +165,8 @@ namespace MyAsistent
             {
                 statusTBot = value;
                 MainSettings.StatusTBot = value;
-                if (value) Module.Internet.TelegramBotModule.TelegramBot.Start();
-                else Module.Internet.TelegramBotModule.TelegramBot.Stop();
+                if (value) ControllerAssistent.StartTelegramBot();
+                else ControllerAssistent.StopTelegramBot();
             }
         }
         public bool StatusWebServers
@@ -174,8 +176,8 @@ namespace MyAsistent
             {
                 statusWebServers = value;
                 MainSettings.StatusWebServer = value;
-                if(value)Module.Internet.WebServer.WebServerManager.Start();
-                else Module.Internet.WebServer.WebServerManager.Close();
+                if (value) ControllerAssistent.StartWebServer();
+                else ControllerAssistent.StopWebServer();
             }
         }
         public string IpInject
@@ -231,7 +233,6 @@ namespace MyAsistent
             set
             {
                 bhaud = value;
-                Codes.COMSENDER.INIT();
                 MainSettings.BaudRate = value;
                 
             }
@@ -302,7 +303,7 @@ namespace MyAsistent
         
         public static Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
         public static MainWindow MainWindow_Static;
-        public static MyData date;
+        public static MainWindow_ViewModel date;
         public Mutex mut = new Mutex();
         public Mutex mutWeb = new Mutex();
         public MainWindow()
@@ -334,7 +335,7 @@ namespace MyAsistent
                     await App.Current.Dispatcher.InvokeAsync(() => FierwareStatus.Text = "Updating");
 
                     await App.Current.Dispatcher.InvokeAsync(async () => await Task.Run(()=>FierwareStatus.Text =
-                    (ArduinoFierware.SelectedItem as Module.Internet.ArduinoClient).OTAUpdate(fierwarePath)));
+                    ControllerAssistent.UpdateOTAArduino(fierwarePath, ArduinoFierware.SelectedItem as IInternetClient)));
                 });
 
             }
@@ -371,7 +372,7 @@ namespace MyAsistent
             while (mainFrame.NavigationService.RemoveBackEntry() != null) ;
             mainFrame.Navigate(new Windows.Code.MainPageCode());
         }
-        public static Dictionary<string, Codes.MenuArgumentItem> menu = new Dictionary<string, Codes.MenuArgumentItem>()
+        public static Dictionary<string, MyAssistentDLL.Module.Codes.MenuArgumentItem> menu = new Dictionary<string, MyAssistentDLL.Module.Codes.MenuArgumentItem>()
         {
             {"Path",  new MyAsistent.Windows.Page_Add_PathModule()},
             {"Arduino",  new MyAsistent.Windows.ArduinoNonResult()},
@@ -390,7 +391,8 @@ namespace MyAsistent
         {
             if (New != MainSettings.WaitForConectionDevice)
             {
-                MainSettings.WaitForConectionDevice = New; MyAsistent.Module.Internet.InternetWorkerModule.StartServer();
+                MainSettings.WaitForConectionDevice = New; 
+               ControllerAssistent.RestartInternetWorker();
             }
         }
         public void SyncronizateMainSeetings()
@@ -405,7 +407,7 @@ namespace MyAsistent
                 }
                 catch (Exception ex)
                 {
-                    Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                    Log.Write(TypeLog.Error, ex.Message);
                 }
                 try
                 {
@@ -413,57 +415,51 @@ namespace MyAsistent
                 }
                 catch (Exception ex)
                 {
-                    Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                    Log.Write(TypeLog.Error, ex.Message);
                 }
                 MainSettings.Init();
                 SaveTime.Time = MainSettings.SaveCommandTime;
                 WaitTime.Time = MainSettings.WaitForConectionDevice;
-                Module.Internet.InternetWorkerModule.DispetcherClassesConection.Start();
+                ControllerAssistent.RestartInternetWorkerDispetcher(); 
             });
             
 
         }
-        public void InilizationApp()
+        public async void InilizationApp()
         {
 
             MainWindow_Static = this;
-
-            //Task.Delay(5000);
-
-
-            //inits
             foreach (var item in MyAsistent.Lang.LanguageManager.Lang)
                 this.Lang.Items.Add(item);
             this.Lang.SelectedIndex = 0;
             Lang.SelectionChanged += Lang_SelectionChanged;
-            MainSettings.Init();
-            MainSettings.Load();
+
+            
+
             InjectItems.ItemsSource = Account.Accounts;
             SaveTime.Time = MainSettings.SaveCommandTime;
             WaitTime.Time = MainSettings.WaitForConectionDevice;
-            Module.Sound.Sound.Init();
-            Module.Sound.Voice.Init();
+          
           
 
-            ComSettings.ItemsSource = Codes.COMSENDER.GetAllCom();
+            ComSettings.ItemsSource = ControllerAssistent.GetAllCom();
             ComSettings.SelectionChanged += ComSettings_SelectionChanged;
 
-            Logs.Log.SendMsgToConsoleEvent += Log_SendMsgToConsoleEvent;
-            Logs.Log.SendMsgToConsoleWebServerEvent += Log_SendMsgToConsoleWebServerEvent;
+            Log.SendMsgToConsoleEvent += Log_SendMsgToConsoleEvent;
+            Log.SendMsgToConsoleWebServerEvent += Log_SendMsgToConsoleWebServerEvent;
 
             //load
             TIDList.ItemsSource = MainSettings.WhiteListID;
 
-            Codes.COMSENDER.INIT();
 
 
-            foreach (var i in Module.Sound.Voice.GetName())
+            foreach (var i in ControllerAssistent.AllVoiceCultureName())
                 Setting_SetSpeechVoice.Items.Add(i.ToString());
-            foreach (var i in Module.Sound.Sound.getAllCultures())
+            foreach (var i in ControllerAssistent.AllSoundCultureName())
                 if (i.Culture.Name.Length != 0)
                     Seting_SetSpechCulture.Items.Add(i.Culture.Name);
-            if (Seting_SetSpechCulture.Items.Count == 0) Logs.Log.Write(Logs.TypeLog.Error, "Не установлен не один пакет распознование голоса работа программы не возможна!");
-            if (Setting_SetSpeechVoice.Items.Count == 0) Logs.Log.Write(Logs.TypeLog.Error, "Не установлен не один пакет воспроиведения голоса работа программы не возможна!");
+            if (Seting_SetSpechCulture.Items.Count == 0) Log.Write(TypeLog.Error, "Не установлен не один пакет распознование голоса работа программы не возможна!");
+            if (Setting_SetSpeechVoice.Items.Count == 0) Log.Write(TypeLog.Error, "Не установлен не один пакет воспроиведения голоса работа программы не возможна!");
 
 
             //Setings load
@@ -474,29 +470,28 @@ namespace MyAsistent
 
 
             //checkerror
-            if (menu.Keys.Count != (Enum.GetNames(typeof(Codes.TypeArgumend)).Length))
-                Logs.Log.Write(Logs.TypeLog.Warning, "Не все окна привязаны к типам ввода");
+            if (menu.Keys.Count != (ControllerAssistent.GetAllNameTypeArgument().Length))
+                Log.Write(TypeLog.Warning, "Не все окна привязаны к типам ввода");
             if (MainSettings.CultureText.Count != Seting_SetSpechCulture.Items.Count)
             {
-                Logs.Log.Write(Logs.TypeLog.Error, "Не все языки распознаны");
-                Logs.Log.Write(Logs.TypeLog.Message, "Попытка исправить");
+                Log.Write(TypeLog.Error, "Не все языки распознаны");
+                Log.Write(TypeLog.Message, "Попытка исправить");
                 try
                 {
                     foreach (var i in Seting_SetSpechCulture.Items)
                         if (!MainSettings.CultureText.ContainsKey(i.ToString()))
                             MainSettings.CultureText.Add(i.ToString(), " ");
-                    Logs.Log.Write(Logs.TypeLog.Message, "Успешно исправленно!");
+                    Log.Write(TypeLog.Message, "Успешно исправленно!");
                 }
                 catch (Exception)
                 {
-                    Logs.Log.Write(Logs.TypeLog.Error, "Невозможно исправить дальнейшая работа программы не возможна");
+                    Log.Write(TypeLog.Error, "Невозможно исправить дальнейшая работа программы не возможна");
 
                 }
             }
 
 
             listCultureText.ItemsSource = MainSettings.CultureText;
-            ArduinoSocketUsersComboBox.ItemsSource = Module.Internet.InternetWorkerModule.DispetcherClassesConection.ArduinoClients;
             ArduinoSocketUsersComboBox.SelectionChanged += ArduinoSocketUsersComboBox_SelectionChanged;
 
             try
@@ -505,7 +500,7 @@ namespace MyAsistent
             }
             catch (Exception ex)
             {
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                Log.Write(TypeLog.Error, ex.Message);
             }
             try
             {
@@ -513,16 +508,12 @@ namespace MyAsistent
             }
             catch (Exception ex)
             {
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                Log.Write(TypeLog.Error, ex.Message);
             }
 
-            Codes.Code_Saver.Load();
            
-           
-            Module.Internet.InternetWorkerModule.StartServer();
 
-            PCClients.ItemsSource = Module.Internet.InternetWorkerModule.DispetcherClassesConection.PCClients;
-            date = new MyData();
+            date = new MainWindow_ViewModel();
             DataContext = date;
 
             //Slider
@@ -530,11 +521,26 @@ namespace MyAsistent
             this.sliderSens.ValueChanged += SliderSens_ValueChanged;
 
 
+            ControllerAssistent.OnConnetctedDevicesInternet += ControllerAssistent_OnConnetctedDevicesInternet;
+
+        }
+
+        private void ControllerAssistent_OnConnetctedDevicesInternet(string Name, IInternetClient Client)
+        {
+            switch (Name)
+            {
+                case "Arduino":
+                    ArduinoSocketUsersComboBox.Items.Add(Client);
+                    break;
+                case "PC":
+                    PCClients.Items.Add(Client);
+                    break;
+            }
         }
 
         private void SliderSens_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            MyAsistent.Module.Sound.Sound.Sensivity = sliderSens.Value;
+            ControllerAssistent.VoiceSensivity = sliderSens.Value;
         }
 
         private void Lang_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -562,80 +568,58 @@ namespace MyAsistent
                     MessageBox.Show("Такой пользователь уже есть в системе");
         }
 
-        private async void Log_SendMsgToConsoleWebServerEvent(Paragraph para)
+        private Paragraph CreateParagraph(TypeLog type, string message)
         {
-            try
+            Paragraph para = new Paragraph();
+            para.Inlines.Add(new Run($"{DateTime.Now.ToLongDateString()} ({DateTime.Now.ToLongTimeString()}) | {message} | ") { Foreground = new SolidColorBrush(Colors.LightGreen) });
+            switch (type)
             {
-                await App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                case TypeLog.Message:
+                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Green) }));
+                    break;
+                case TypeLog.Error:
+                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Red) }));
+                    break;
+                case TypeLog.Warning:
+                    para.Inlines.Add(new Bold(new Run(type.ToString()) { Foreground = new SolidColorBrush(Colors.Yellow) }));
+                    break;
+
+            }
+            return para;
+        }
+        private async Task WriteLog(RichTextBox Console,TypeLog type, string message)
+        {
+            await Dispatcher.InvokeAsync(async () =>
+            {
+                var Text = CreateParagraph(type, message);
+                try
                 {
-                    try
-                    {
-                        if (LogWebServer.CheckAccess())
-                        {
-                            LogWebServer.Document.Blocks.Add(para);
-                        }
+                    await App.Current.Dispatcher.BeginInvoke(new Action(() => Console.Document.Blocks.Add(Text)));
 
-                        else
-                        {
-                            
-                            this.LogWebServer.Document.Blocks.Add(para);
-                        
-                        }
-                       
-                    }
-                    catch (Exception ex )
-                    {
-                        Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
-                    }
-                }));
+                }
+                catch (Exception ex)
+                {
 
-            }
-            catch (Exception ex)
-            {
-
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
-            }
+                    Log.Write(TypeLog.Error, ex.Message);
+                }
+            });
+           
+        }
+        private async void Log_SendMsgToConsoleWebServerEvent(TypeLog type, string message)
+        {
+            await WriteLog(LogWebServer, type, message);
         }
 
-        private async void Log_SendMsgToConsoleEvent(Paragraph para)
+        private async void Log_SendMsgToConsoleEvent(TypeLog type, string message)
         {
-            try
-            {
-                await App.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    try
-                    {
-                        mut.WaitOne();
-                        if (OutputLog.CheckAccess())
-                        {
-                            OutputLog.Document.Blocks.Add(para);
-                        }
-
-                        else
-                        {
-                            this.OutputLog.Document.Blocks.Add(para);
-                        }
-                        mut.ReleaseMutex();
-                    }
-                    catch (Exception ex)
-                    {
-                        Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
-                    }
-                }));
-               
-            }
-            catch (Exception ex)
-            {
-
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
-            }
-           
+            await WriteLog(OutputLog, type, message);
         }
 
         private void ArduinoSocketUsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(((Module.Internet.ArduinoClient)ArduinoSocketUsersComboBox.SelectedValue)!=null)
-                ArduinoSocketUsersListBox.ItemsSource = ((Module.Internet.ArduinoClient)ArduinoSocketUsersComboBox.SelectedValue).AllCommand;
+            var selected = ArduinoSocketUsersComboBox.SelectedValue as IInternetClient;
+            if (selected != null)
+                ArduinoSocketUsersListBox.ItemsSource = ControllerAssistent.GetAllCommandArduino(selected);
             else
             {
                 ArduinoSocketUsersListBox.ItemsSource = null;
@@ -645,7 +629,8 @@ namespace MyAsistent
 
         private void ComSettings_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MainSettings.COMname = ComSettings.SelectedItem.ToString();Codes.COMSENDER.INIT();
+            MainSettings.COMname = ComSettings.SelectedItem.ToString();
+            ControllerAssistent.RestartCom();
         }
 
         private void ListCultureText_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -674,41 +659,36 @@ namespace MyAsistent
         }
         private void RestartServer_Click(object sender, RoutedEventArgs e)
         {
-            Module.Internet.InternetWorkerModule.StartServer();
+            ControllerAssistent.RestartInternetWorker();
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-            Codes.Code_Saver.Save();
+           
             MainSettings.Save();
         }
-        private void StartWebServer(object sender, RoutedEventArgs e)
-        {
-            if ((sender as CheckBox).IsChecked == true) Module.Internet.WebServer.WebServerManager.Start();
-            else Module.Internet.WebServer.WebServerManager.Close();
-
-        }
+      
         private void TypePath_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Coomand.ItemsSource = null;
             var obj = new Windows.AddItem((sender as ComboBox).SelectedItem.ToString());
             if (obj.tryInit)
                 obj.Show();
-            else Logs.Log.Write(Logs.TypeLog.Error, $"Не найдена страница {(sender as ComboBox).SelectedItem.ToString()}");
-            Coomand.ItemsSource = Codes.Code_Saver.dates_Culture;
+            else Log.Write(TypeLog.Error, $"Не найдена страница {(sender as ComboBox).SelectedItem}");
+            Coomand.ItemsSource = ControllerAssistent.GetCurrentLangCulture();
         }
       
         private void Setting_SetSpeechVoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Module.Sound.Voice.SelectVoice((sender as ComboBox).SelectedItem.ToString());
+            ControllerAssistent.SetVoiceSpeech((sender as ComboBox).SelectedItem.ToString());
             MainSettings.VoiceCulture = (sender as ComboBox).SelectedItem.ToString();
         }
         private void Setting_Seting_SetSpechCulture(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as ComboBox).Items.Count == 1) return;
             Coomand.ItemsSource = null;
-            Codes.Code_Saver.ChangeCulture((sender as ComboBox).SelectedItem.ToString());
-            Coomand.ItemsSource = Codes.Code_Saver.dates_Culture;
+            ControllerAssistent.ChangeCulture((sender as ComboBox).SelectedItem.ToString());
+            Coomand.ItemsSource = ControllerAssistent.GetCurrentLangCulture();
 
         }
 
@@ -718,17 +698,17 @@ namespace MyAsistent
             {
                 if (inputeText.Text != "")
                 {
-                    var res = Module.Cmd.Cmd.Push(inputeText.Text);
+                    var res = MyAssistentDLL.Module.Cmd.Cmd.Push(inputeText.Text);
                     Paragraph para = new Paragraph();
                     para.Inlines.Add(new Run($"<=| {inputeText.Text} |=>\n") { Foreground = new SolidColorBrush(Colors.Red) });
                     para.Inlines.Add(new Run($"{DateTime.Now.ToLongDateString()} |") { Foreground = new SolidColorBrush(Colors.LightGreen) });
                     switch (res.Item1)
                     {
-                        case Module.Cmd.Cmd.TypeCmd.Successful:
+                        case MyAssistentDLL.Module.Cmd.Cmd.TypeCmd.Successful:
                             para.Inlines.Add(new Run($" {res.Item2} | ") { Foreground = new SolidColorBrush(Colors.Green) });
 
                             break;
-                        case Module.Cmd.Cmd.TypeCmd.Error:
+                        case MyAssistentDLL.Module.Cmd.Cmd.TypeCmd.Error:
                             para.Inlines.Add(new Run($" {res.Item2} | ") { Foreground = new SolidColorBrush(Colors.Red) });
 
                             break;

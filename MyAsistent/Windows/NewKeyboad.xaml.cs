@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+using MyAssistentDLL.Module.Codes;
+using MyAssistentDLL.Logs;
+
 
 namespace MyAsistent.Windows
 {
@@ -208,7 +201,7 @@ namespace MyAsistent.Windows
             catch (Exception ex)
             {
 
-                Logs.Log.Write(Logs.TypeLog.Error, ex.Message);
+                Log.Write(TypeLog.Error, ex.Message);
             }
 
 
@@ -257,11 +250,11 @@ namespace MyAsistent.Windows
 
         }
     }
-    public partial class NewKeyboad : Page, Codes.MenuArgumentItem
+    public partial class NewKeyboad : Page, MenuArgumentItem
     {
 
-        private (Codes.TypeArgumend, string[], bool local)? result = null;
-        public (Codes.TypeArgumend, string[], bool local)? Result => result;
+        private (TypeArgumend, string[], bool local)? result = null;
+        public (TypeArgumend, string[], bool local)? Result => result;
         public void clear()
         {
             result = null;
@@ -272,11 +265,11 @@ namespace MyAsistent.Windows
         private void B_Click(object sender, RoutedEventArgs e)
         {
             
-            result = (Codes.TypeArgumend.Keyboard, worker.GetResult(), locals.IsChecked.Value);
+            result = (TypeArgumend.Keyboard, worker.GetResult(), locals.IsChecked.Value);
             OnClose.Invoke(this);
         }
 
-        public event Codes.Close OnClose;
+        public event Close OnClose;
         GridsCustom worker;
         public NewKeyboad()
         {

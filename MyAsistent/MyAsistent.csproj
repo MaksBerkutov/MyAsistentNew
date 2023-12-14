@@ -42,6 +42,9 @@
   <PropertyGroup>
     <ApplicationIcon>Logo_Red.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Humanizer, Version=2.14.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\packages\Humanizer.Core.2.14.1\lib\netstandard2.0\Humanizer.dll</HintPath>
@@ -159,35 +162,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Lang\LangManager.cs" />
-    <Compile Include="Logs\Log.cs" />
-    <Compile Include="MainSettings.cs" />
     <Compile Include="MainWindow.cs" />
-    <Compile Include="Module\Cmd\Cmd.cs" />
-    <Compile Include="Module\CodeModul\Compiler\AsisstentCodeBase.cs" />
-    <Compile Include="Module\CodeModul\Compiler\Compiler.cs" />
-    <Compile Include="Module\CodeModul\Compiler\ErrorInfo.cs" />
-    <Compile Include="Module\DesignerCode\DesignerCode.xaml.cs">
+    <Compile Include="DesignerCode\DesignerCode.xaml.cs">
       <DependentUpon>DesignerCode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Module\DesignerCode\MyItem\Arduino.xaml.cs">
+    <Compile Include="DesignerCode\MyItem\Arduino.xaml.cs">
       <DependentUpon>Arduino.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Module\DesignerCode\MyItem\ICode.cs" />
-    <Compile Include="Module\DesignerCode\MyItem\Vosie.xaml.cs">
+    <Compile Include="DesignerCode\MyItem\ICode.cs" />
+    <Compile Include="DesignerCode\MyItem\Vosie.xaml.cs">
       <DependentUpon>Vosie.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Module\Internet\CodeInject\InjectWorker.cs" />
-    <Compile Include="Module\Internet\Internet.cs" />
-    <Compile Include="Module\Internet\TelegramBotModule\TelegramBot.cs" />
-    <Compile Include="Module\Internet\WebServer\WebServerManager.cs" />
-    <Compile Include="Module\MessageBoxes\GetString.xaml.cs">
+    <Compile Include="MessageBoxes\GetString.xaml.cs">
       <DependentUpon>GetString.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyError\Error.cs" />
     <Compile Include="MyGUIElemet\TimePicker.xaml.cs">
       <DependentUpon>TimePicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logs\TypeLog.cs" />
     <Compile Include="Theme\ThemeChanger.cs" />
     <Compile Include="Windows\AddItem.xaml.cs">
       <DependentUpon>AddItem.xaml</DependentUpon>
@@ -220,15 +212,15 @@
     <Compile Include="Windows\Page_Add_PathModule.xaml.cs">
       <DependentUpon>Page_Add_PathModule.xaml</DependentUpon>
     </Compile>
-    <Page Include="Module\DesignerCode\DesignerCode.xaml">
+    <Page Include="DesignerCode\DesignerCode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Module\DesignerCode\MyItem\Arduino.xaml">
+    <Page Include="DesignerCode\MyItem\Arduino.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Module\DesignerCode\MyItem\Vosie.xaml">
+    <Page Include="DesignerCode\MyItem\Vosie.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -256,8 +248,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Module\CodeModul\Code.cs" />
-    <Page Include="Module\MessageBoxes\GetString.xaml">
+    <Page Include="MessageBoxes\GetString.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -307,7 +298,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Module\Sound\Sound.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -345,12 +335,12 @@
     <Resource Include="Logo_Red.ico" />
     <Resource Include="Image\Arduino.png" />
     <Resource Include="Image\Vosie.png" />
-    <Content Include="Module\Internet\WebServer\Site\index.html" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Module\Internet\WebServer\Site\css\" />
-    <Folder Include="Module\Internet\WebServer\Site\image\" />
-    <Folder Include="Module\Internet\WebServer\Site\js\" />
+    <ProjectReference Include="..\MyAssistentDLL\MyAssistentDLL.csproj">
+      <Project>{3ece390f-746f-4ba9-a523-06e96c8091cb}</Project>
+      <Name>MyAssistentDLL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

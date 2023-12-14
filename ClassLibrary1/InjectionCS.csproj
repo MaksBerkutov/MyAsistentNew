@@ -44,7 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsistenetVariableManager.cs" />
+    <Compile Include="AssistentVariable.cs" />
     <Compile Include="Injection.cs" />
+    <Compile Include="PacketDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

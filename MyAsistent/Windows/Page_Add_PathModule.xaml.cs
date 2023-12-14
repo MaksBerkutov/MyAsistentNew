@@ -1,19 +1,8 @@
-﻿using Codes;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MyAssistentDLL.Module.Codes;
+using MyAssistentDLL.Logs;
 
 namespace MyAsistent.Windows
 {
@@ -54,9 +43,9 @@ namespace MyAsistent.Windows
         {
             
             if (!(PathI.Text == ""))
-                result = (Codes.TypeArgumend.Path, new string[] { PathI.Text }, LocalMachine.IsChecked.Value);
+                result = (TypeArgumend.Path, new string[] { PathI.Text }, LocalMachine.IsChecked.Value);
 
-            else Logs.Log.Write(Logs.TypeLog.Warning, "Path is NULL");
+            else Log.Write(TypeLog.Warning, "Path is NULL");
             Try = true;
             Content = null;
             OnClose.Invoke(this);

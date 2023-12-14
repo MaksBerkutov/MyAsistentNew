@@ -11,34 +11,60 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MyAssistentDLL;
+using MyAssistentDLL.Module.Codes;
+using MyAssistentDLL.Module.Internet;
+
 
 namespace MyAsistent.Windows
 {
     /// <summary>
     /// Логика взаимодействия для ArduinoCommandCreate.xaml
     /// </summary>
-    public partial class ArduinoNonResult : Page, Codes.MenuArgumentItem
+    public partial class ArduinoNonResult : Page, MenuArgumentItem
     {
-        private (Codes.TypeArgumend, string[], bool local)? result = null;
-        public (Codes.TypeArgumend, string[], bool local)? Result => result;
+        private (TypeArgumend, string[], bool local)? result = null;
+        public (TypeArgumend, string[], bool local)? Result => result;
+        private void Load()
+        {
+            var AllArduino = ControllerAssistent.GetAllArduinoClinet();
+
+            AllArduino.ForEach(ar =>
+            ArduinoName.Items.Add(ar)
+            );
+
+        }
         public ArduinoNonResult()
         {
             InitializeComponent();
-            ArduinoName.ItemsSource = Module.Internet.InternetWorkerModule.DispetcherClassesConection.ArduinoClients;
+            ControllerAssistent.OnConnetctedDevicesInternet += ControllerAssistent_OnConnetctedDevicesInternet;
+            Load();
             ArduinoName.SelectionChanged += ArduinoName_SelectionChanged;
         }
+
+        private void ControllerAssistent_OnConnetctedDevicesInternet(string Name, MyAssistentDLL.Module.Internet.IInternetClient Client)
+        {
+            if (Name == "Arduino")
+            {
+                ArduinoName.Items.Add(Client);
+
+            }
+        }
+
         public static bool Try = false;
         public void clear()
         {
             result = null;
-            ArduinoName.ItemsSource = Module.Internet.InternetWorkerModule.DispetcherClassesConection.ArduinoClients;
+            Load();
         }
-        public event Codes.Close OnClose;
+        public event Close OnClose;
 
         private void ArduinoName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if((Module.Internet.ArduinoClient)ArduinoName.SelectedValue!=null)
-                ArduinoCommand.ItemsSource = ((Module.Internet.ArduinoClient)ArduinoName.SelectedValue).Command;
+            var selected = ArduinoName.SelectedValue as IInternetClient;
+
+            if (selected != null)
+                ArduinoCommand.ItemsSource = ControllerAssistent.GetCommandArduino(selected);
             else
             {
                 ArduinoCommand.ItemsSource = null;
@@ -52,10 +78,9 @@ namespace MyAsistent.Windows
                 ArduinoCommand.SelectedIndex >= 0 && ArduinoName.SelectedIndex >= 0 )
             {
                 Try = true;
-                result = (Codes.TypeArgumend.Arduino, new string[] { ((Module.Internet.ArduinoClient)ArduinoName.SelectedValue).Name, ArduinoCommand.SelectedItem.ToString() }, true);
+                result = (TypeArgumend.Arduino, new string[] { (ArduinoName.SelectedValue as IInternetClient).Name, ArduinoCommand.SelectedItem.ToString() }, true);
                 OnClose.Invoke(this);
             }
-            //Codes.Code_Saver.add((Command.Text, MainSettings.SpeechCulture), (Codes.TypeArgumend.Arduino, new string[] { ((Module.Internet.ArduinoClient)ArduinoName.SelectedValue).Name, ArduinoCommand.SelectedItem.ToString(), Voice.Text }));
         }
 
         private void Voice_TextChanged()

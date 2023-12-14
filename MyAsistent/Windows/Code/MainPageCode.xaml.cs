@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyAssistentDLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -88,7 +89,7 @@ namespace MyAsistent.Windows.Code
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         ErrorBox.Text = String.Empty;
-                        if (MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Compile(codeEditor.Text, out var err, out var memoryStream))
+                        if (ControllerAssistent.CompileCode(codeEditor.Text, out var err, out var memoryStream))
                             ErrorBox.Text = "Успешно скомпилиривано";
                         else
                             foreach (var ex in err)
@@ -110,10 +111,10 @@ namespace MyAsistent.Windows.Code
                     App.Current.Dispatcher.Invoke(() =>
                     {
                         ErrorBox.Text = String.Empty;
-                        if (MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Compile(codeEditor.Text, out var err, out var memoryStream))
+                        if (ControllerAssistent.CompileCode(codeEditor.Text, out var err, out var memoryStream))
                         {
                             ErrorBox.Text = "Успешно скомпилиривано";
-                            MyAsistent.Module.CodeModul.Compiler.CodeCompiler.Run(memoryStream);
+                            ControllerAssistent.RunCode(memoryStream);
                         }
                         else
                             foreach (var ex in err)

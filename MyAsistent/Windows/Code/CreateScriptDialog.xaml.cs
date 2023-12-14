@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MyAssistentDLL;
+using MyAssistentDLL.Logs;
+
 
 namespace MyAsistent.Windows.Code
 {
@@ -24,7 +17,7 @@ namespace MyAsistent.Windows.Code
         public CreateScriptDialog()
         {
             InitializeComponent();
-            Path.Text = MainSettings.PathToSaveScript;
+            Path.Text = MainSettings.PATH_SAVE_SCRIPT;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -69,7 +62,7 @@ namespace MyAsistent.Windows.Code
             }
             catch (Exception ex)
             {
-                Logs.Log.Write(Logs.TypeLog.Error,ex.Message);
+                Log.Write(TypeLog.Error,ex.Message);
                 
             }
             

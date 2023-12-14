@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using MyAssistentDLL.Module.Codes;
 
 namespace MyAsistent.Windows
 {
@@ -20,12 +9,12 @@ namespace MyAsistent.Windows
     public partial class AddItem : Window
     {
         public bool tryInit;
-       public  (Codes.TypeArgumend, string[], bool local)? Result;
+       public  (TypeArgumend, string[], bool local)? Result;
         public AddItem(string str)
         {
 
             InitializeComponent();
-            if (tryInit = MainWindow.menu.TryGetValue(str, out Codes.MenuArgumentItem page))
+            if (tryInit = MainWindow.menu.TryGetValue(str, out MenuArgumentItem page))
             {
                 page.OnClose += Page_OnClose;
                 page.clear();
@@ -38,7 +27,7 @@ namespace MyAsistent.Windows
 
         private void Page_OnClose(object sender)
         {
-            var item = ((Codes.MenuArgumentItem)sender);
+            var item = (MenuArgumentItem)sender;
             if (item != null)
             {
                 Result = item.Result;
